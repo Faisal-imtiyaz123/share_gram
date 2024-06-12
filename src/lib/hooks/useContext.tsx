@@ -1,5 +1,6 @@
-"use client"
 import { createContext, useContext, useRef } from "react"
+
+
 
 interface ContextType{
     searchNavLinkRef : React.RefObject<HTMLDivElement>,
@@ -27,7 +28,7 @@ export function RefProvider({children}:{children:React.ReactNode}){
 
 }
 
-export function useRefContext(){
+export default function useRefContext(){
     const context =  useContext(Context)
     return(
         context

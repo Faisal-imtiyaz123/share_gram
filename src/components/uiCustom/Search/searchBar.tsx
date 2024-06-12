@@ -1,14 +1,9 @@
-"use client";
-
 import { Input } from "@/components/ui/input";
-import { searchUsers } from "@/lib/actions/userActions/searchUsers";
-import { DbUser } from "@/lib/types/userTypes";
-import { Search } from "lucide-react";
+import { useSearchStore } from "@/lib/Zustand-store/SearchStore";
+import useRefContext from "@/lib/hooks/useContext";
 import { useEffect, useRef, useState } from "react";
 import SearchedUserList from "./SearchedUserList";
-import { fetchUserDbId } from "@/lib/actions/userActions/fetchUserDbId";
-import { useSearchStore } from "@/lib/Zustand-store/SearchStore";
-import { useRefContext } from "@/lib/hooks/useContext";
+
 
 
 export default function SearchBar() {
