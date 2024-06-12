@@ -1,23 +1,9 @@
-"use client";
-
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { useCreateModal } from "@/lib/Zustand-store/createModalStore";
 import { useUploadThing } from "@/lib/uploadthing";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import ImageSlider from "../Create/ImageSlider";
-import { Button } from "@/components/ui/button";
-import { createPost } from "@/lib/actions/postActions/createPost";
+import * as z from "zod"
 const filesSchema = z.object({
   files: z.string().nonempty(),
 });

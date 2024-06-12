@@ -8,12 +8,14 @@ import { RefProvider } from "@/lib/hooks/useContext";
 export default function Home() {
   return (
     <>
-        <RefProvider>
-        <LeftSideBar  />
-        {/* <SearchBar/> */}
+       <RefProvider>
+        <div className="flex">
+        <LeftSideBar /> 
+        <SearchBar/>
         <NotificationSlider/>
-        <CreateModal/>
-      </RefProvider>
+        </div>
+        {/* <CreateModal/> */}
+      </RefProvider> 
     </>
   )
 }

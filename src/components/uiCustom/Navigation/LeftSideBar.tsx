@@ -2,7 +2,7 @@ import { useNotificationSliderStore } from "@/lib/Zustand-store/NotificationStor
 import { useSearchStore } from "@/lib/Zustand-store/SearchStore"
 import { useCreateModal } from "@/lib/Zustand-store/createModalStore"
 import useRefContext from "@/lib/hooks/useContext"
-import { Heart, MessageCircle, PlusCircle, Search } from "lucide-react"
+import { Heart, Home, MessageCircle, PlusCircle, Search } from "lucide-react"
 import { Link } from "react-router-dom"
 import { MoreDropDown } from "../More/MoreDialog"
 
@@ -30,7 +30,7 @@ export default function LeftSideBar() {
 
  }
   return (
-    <div className={`flex relative z-0 bg-white flex-col h-screen border border-r pl-2 p-4 gap-2 w-[15rem] ${isAnySliderOpen?'w-[5rem]':''}`}>
+    <div className={`flex flex-col h-screen border border-r pl-2 p-4 gap-2 w-[15rem] ${isAnySliderOpen?'w-[5rem]':''}`}>
       <h1 className="text-[20px] pl-2 text-gray-600 mb-4">Threads</h1>
       <div className="flex flex-col gap-3 justify-center ">
       <> 
@@ -85,10 +85,7 @@ export default function LeftSideBar() {
           <div className={navLinkClassname}>Profile</div>
         </Link>
       </div>
-      <div className="fixed bottom-4 left-4 bg-red-100 p-8 rounded-full">
-      
-      </div>
-      <MoreDropDown/>
+      {/* <MoreDropDown/> */}
     </div>
   );
 }

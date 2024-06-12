@@ -5,7 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Home from './routes/Home';
-
+import "./globals.css"
 const router = createBrowserRouter([
   {
     path: "/",

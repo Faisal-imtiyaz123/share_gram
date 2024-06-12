@@ -2,12 +2,11 @@ import { Input } from "@/components/ui/input";
 import { useSearchStore } from "@/lib/Zustand-store/SearchStore";
 import useRefContext from "@/lib/hooks/useContext";
 import { useEffect, useRef, useState } from "react";
-import SearchedUserList from "./SearchedUserList";
 
 
 
 export default function SearchBar() {
-  const [matchingUsers, setMatchingUsers] = useState<DbUser[]>([]);
+  // const [matchingUsers, setMatchingUsers] = useState<DbUser[]>([]);
   const { toggle, isOpen,opened } = useSearchStore((s) => s);
   const sheetRef = useRef<HTMLDivElement>(null)
   const context = useRefContext()
@@ -27,18 +26,18 @@ export default function SearchBar() {
       document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [isOpen, toggle,context?.searchNavLinkRef,context?.searchIconRef]);
-
+   
   return (
     <div
       ref={sheetRef}
-      className={` ${isOpen?'fixed':''} left-[5rem] h-screen border-r z-10 shadow-lg bg-white flex flex-col
+      className={` ${isOpen?'fixed':''} left-[5rem] h-screen border-r z-10 shadow-lg bg-whitw flex flex-col
        ${ isOpen ? " w-[25rem] animate-slideOut" : opened?'animate-slideIn':''}`}
        >
       {isOpen && 
         <>
-          <div className="flex basis-[20%] flex-col justify-between bg-re p-6 pt-6 border-b">
+          <div className="flex basis-[20%] flex-col justify-between  p-6 pt-6 border-b">
            <label className="text-2xl font-semibold">Search</label>
-           <Input
+           {/* <Input
              onChange={async (e) => {
                const currentUserId = await fetchUserDbId();
                const users = (await searchUsers(
@@ -47,9 +46,9 @@ export default function SearchBar() {
                )) as DbUser[];
                setMatchingUsers(() => (e.target.value ? users : []));
              }}
-           />
+           /> */}
           </div>
-           <SearchedUserList matchingUsers={matchingUsers} />
+           {/* <SearchedUserList matchingUsers={matchingUsers} /> */}
            </>
     }
     </div>
