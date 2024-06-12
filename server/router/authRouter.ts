@@ -1,16 +1,17 @@
 import { connectToDatabase } from '../db';
-import {router,publicProcedure } from '../trpc'
 import * as z from "zod"
 import { comparePassword, generateAuthToken, hashPassword, setAuthTokenCookie } from '../utils/authUtils';
+import { initTRPC} from '@trpc/server';
+import { publicProcedure, router } from '../trpc';
+
 
 export const authRouter = router({
-    login: publicProcedure
-    .input(z.object({
+    login: publicProcedure.input(z.object({
       username: z.string().min(1, "Username is required"),
       password: z.string().min(1, "Password is required"),
     }))
-    .mutation(async ({ctx,input}) => {
-      const { username, password } = input;
+    .mutation(async (opts) => {
+      const { username, password } = opts.input;
       const db = await connectToDatabase()
       const usersCollection = db.collection('users')
       const user = await usersCollection.findOne({ username})
@@ -26,7 +27,7 @@ export const authRouter = router({
         }
       }
       const token = generateAuthToken(user._id)
-      // setAuthTokenCookie(, token);
+      setAuthTokenCookie(opts.ctx.res, token);
       if(user){
         return {
             message:"success",
@@ -60,4 +61,20 @@ export const authRouter = router({
 
     return { message: 'Signup successful' };
       }),
+    currentUser:publicProcedure.query(async (opts)=>{
+        const db = await connectToDatabase()
+        const usersCollection = db.collection('users')
+        const user = await usersCollection.findOne({ _id: opts.ctx.user._id });
+        if(user){
+            return {
+                message:"success",
+                user,
+            }
+        }else{
+            return {
+                message:"User not found",
+            }
+        }
+
+    })
 })

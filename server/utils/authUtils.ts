@@ -32,12 +32,10 @@ export const generateAuthToken = (userId: string): string => {
     const payload = { userId }; // Add additional user information if needed
   
     // Encrypt the payload before signing
-    const encryptedPayload = encryptPayload(payload, process.env.ENCRYPTION_KEY as string);
-  
     // Include encryption information in the header
     // const header = { alg: 'HS256', enc: 'A256CBC' }; // HS256 for signing, A256CBC for encryption
   
-    const token = jwt.sign({ data: encryptedPayload }, process.env.SECRET as string );
+    const token = jwt.sign({ data: userId }, process.env.SECRET as string );
     return token;
   };
 
