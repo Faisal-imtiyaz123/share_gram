@@ -3,7 +3,6 @@ import * as trpcExpress from '@trpc/server/adapters/express';
 import express from 'express';
 import {authRouter} from './router/authRouter'
 import cors from "cors"
-import { decryptPayload } from './utils/authUtils';
 
 // created for each request
 const createContext = async (opts: trpcExpress.CreateExpressContextOptions)=> {
@@ -26,11 +25,13 @@ const createContext = async (opts: trpcExpress.CreateExpressContextOptions)=> {
     res:opts.res,
   }
 }; // no context
-type Context = Awaited<ReturnType<typeof createContext>>;
+export type Context = Awaited<ReturnType<typeof createContext>>;
 
 const t = initTRPC.context<Context>().create();
-const appRouter = t.router({
-  // [...]
+ const router = t.router
+ const publicProcedure = t.procedure
+
+const appRouter = router({
   auth:authRouter
 });
 
