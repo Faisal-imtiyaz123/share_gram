@@ -29,17 +29,15 @@ const encryptPayload = (payload: object, key: string): string => {
 };
 
 export const generateAuthToken = (userId: string): string => {
-    const payload = { userId }; // Add additional user information if needed
-  
     // Encrypt the payload before signing
     // Include encryption information in the header
     // const header = { alg: 'HS256', enc: 'A256CBC' }; // HS256 for signing, A256CBC for encryption
   
-    const token = jwt.sign({ data: userId }, process.env.SECRET as string );
+    const token = jwt.sign( {data:userId} , process.env.SECRET as string );
     return token;
   };
- export const verifyJwt = (token:string)=>{
-  const decoded = jwt.verify(token, process.env.SECRET as string)
+ export function  verifyJwt(token:string){
+  const decoded = jwt.verify(token, process.env.SECRET as string) as unknown as {data:string,iat:string};
   return decoded
  }
 export const setAuthTokenCookie = (res: Response, token: string) => {

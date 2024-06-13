@@ -7,9 +7,15 @@ import { verifyJwt } from './utils/authUtils';
 
 // created for each request
 const createContext = async (opts: trpcExpress.CreateExpressContextOptions)=> {
+  if(opts.req.headers.auth === "pass"){
+    return{
+      req:opts.req,
+      res:opts.res,
+    }
+  }
   async function getUserFromHeader() {
     if (opts.req.headers.authorization) {
-      const user = await verifyJwt(opts.req.headers.authorization);
+      const user = await verifyJwt(opts.req.headers.authorization.split(' ')[1]);
       return user;
     }
     return null;
