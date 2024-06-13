@@ -1,43 +1,29 @@
-// import { LoginForm } from "@/components/customAuth/LoginForm";
-// import ProtectedRoute from "@/components/customAuth/ProtectedRoute";
-// import SignUpForm from "@/components/customAuth/SignUpForm";
-// import { CreateModal } from "@/components/uiCustom/Modals/CreateModal";
-import LeftSideBar from "@/components/uiCustom/Navigation/LeftSideBar";
+
+import LeftSideBar from "@/components/uiCustom/Home/LeftSideBar";
 import NotificationSlider from "@/components/uiCustom/Notifications/NotificationSlider";
 import SearchBar from "@/components/uiCustom/Search/searchBar";
-// import { getAuthCookie } from "@/lib/actions/auth/auth.actions";
-// import { RefProvider } from "@/lib/hooks/useContext";
-// import { trpc } from "@/lib/trpc";
-// import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-// import { httpBatchLink } from "@trpc/client";
-// import { useState } from "react";
-
+import { RefProvider } from "@/lib/hooks/useContext";
+import SignOutButton from "@/components/uiCustom/Home/SigOutButton";
+import { Outlet, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function Home() {
-  // const [queryClient] = useState(() => new QueryClient());
-  // const [trpcClient] = useState(() =>
-  //   trpc.createClient({
-  //     links: [
-  //       httpBatchLink({
-  //         url: 'http://localhost:3000/trpc',
-  //         // You can pass any HTTP headers you wish here
-  //         async headers() {
-  //           return {
-  //           Authorization: getAuthCookie(),
-  //           };
-  //         },
-  //       }),
-  //     ],
-  //   }),
-  // );
+  const navigate = useNavigate()
+  useEffect(()=>{
+    if(!localStorage.getItem('auth')) return navigate('/login')
+  },[navigate])
 
   return (
     <>
        <RefProvider>
         <div className="flex">
+         <div className="flex flex-col h-[100vh]">
         <LeftSideBar /> 
+        <SignOutButton/>
+         </div>
         <SearchBar/>
         <NotificationSlider/>
+        <Outlet/>
         </div>
         {/* <CreateModal/> */}
       </RefProvider> 
