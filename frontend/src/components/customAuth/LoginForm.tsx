@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { trpc } from "@/lib/trpc"
+import { useNavigate } from "react-router-dom"
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -24,7 +25,7 @@ const FormSchema = z.object({
   })
 })
 export function LoginForm() {
-
+  const navigate = useNavigate()
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -38,7 +39,7 @@ export function LoginForm() {
   async function onSubmit(values: z.infer<typeof FormSchema>) {
     mutate(values)
     isSuccess && data.token && localStorage.setItem('auth',data.token)
-    
+    navigate('/home')
 
 }
 
