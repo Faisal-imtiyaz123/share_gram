@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { trpc } from "@/lib/trpc"
 import { useNavigate } from "react-router-dom"
+import { useEffect } from "react"
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -26,6 +27,14 @@ const FormSchema = z.object({
 })
 export function LoginForm() {
   const navigate = useNavigate()
+  const mutatation = trpc.auth.login.useMutation(
+    {onSuccess:(data)=>{
+      localStorage.setItem('auth',data.token)
+      navigate('/')
+    }},
+  )
+  const {data:curentUser}= trpc.auth.currentUser.useQuery()
+  
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -33,13 +42,12 @@ export function LoginForm() {
       password: ""
     },
   })
-
-  const {mutate,data,isSuccess} = trpc.auth.login.useMutation()
+  useEffect(()=>{
+    if(curentUser) navigate('/')
+    },[navigate,curentUser]);
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
-    mutate(values)
-    isSuccess && data.token && localStorage.setItem('auth',data.token)
-    navigate('/home')
+    mutatation.mutate(values)
 
 }
 
