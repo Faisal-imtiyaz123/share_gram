@@ -38,25 +38,28 @@ export const generateAuthToken = (userId: string): string => {
     const token = jwt.sign({ data: userId }, process.env.SECRET as string );
     return token;
   };
-
+ export const verifyJwt = (token:string)=>{
+  const decoded = jwt.verify(token, process.env.SECRET as string)
+  return decoded
+ }
 export const setAuthTokenCookie = (res: Response, token: string) => {
-    res.setHeader('Set-Cookie', `auth=${token}; HttpOnly; Secure; SameSite=Strict`);
+    res.setHeader('Set-Cookie', `auth=${token}; HttpOnly; SameSite=Lax`);
   };
-export const decryptPayload = (encryptedPayload: string, key: string): object | null => {
-    try {
-      // Extract initialization vector (IV)
-      const iv = encryptedPayload.slice(0, 32);
-      const encrypted = encryptedPayload.slice(32);
+// export const decryptPayload = (encryptedPayload: string, key: string): object | null => {
+//     try {
+//       // Extract initialization vector (IV)
+//       const iv = encryptedPayload.slice(0, 32);
+//       const encrypted = encryptedPayload.slice(32);
   
-      // Decrypt the payload
-      const decipher = crypto.createDecipheriv('aes-256-cbc', key, Buffer.from(iv, 'hex'));
-      let decrypted = decipher.update(encrypted, 'base64', 'utf8');
-      decrypted += decipher.final('utf8');
+//       // Decrypt the payload
+//       const decipher = crypto.createDecipheriv('aes-256-cbc', key, Buffer.from(iv, 'hex'));
+//       let decrypted = decipher.update(encrypted, 'base64', 'utf8');
+//       decrypted += decipher.final('utf8');
   
-      // Parse the decrypted JSON string
-      return JSON.parse(decrypted);
-    } catch (error) {
-      console.error('Error decrypting payload:', error);
-      return null; // Indicate decryption failure
-    }
-  };
+//       // Parse the decrypted JSON string
+//       return JSON.parse(decrypted);
+//     } catch (error) {
+//       console.error('Error decrypting payload:', error);
+//       return null; // Indicate decryption failure
+//     }
+//   };

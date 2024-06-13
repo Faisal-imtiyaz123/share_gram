@@ -1,7 +1,7 @@
 import { connectToDatabase } from '../db';
 import * as z from "zod"
 import { comparePassword, generateAuthToken, hashPassword, setAuthTokenCookie } from '../utils/authUtils';
-import { initTRPC} from '@trpc/server';
+import { TRPCError, initTRPC} from '@trpc/server';
 import { publicProcedure, router } from '../trpc';
 
 
@@ -18,12 +18,14 @@ export const authRouter = router({
       if(!user){
         return {
             message:"Invalid username or password",
+            token:""
         }
       }
       const passwordMatch = await comparePassword(password, user.password);
       if (!passwordMatch) {
         return {
             message:"Invalid username or password",
+            token:""
         }
       }
       const token = generateAuthToken(user._id)
@@ -36,6 +38,7 @@ export const authRouter = router({
       }else{
         return {
             message:"Invalid username or password",
+            token:""
         }
       }
     
@@ -63,18 +66,14 @@ export const authRouter = router({
       }),
     currentUser:publicProcedure.query(async (opts)=>{
         const db = await connectToDatabase()
+        if(!opts.ctx.user) throw new TRPCError({code:"UNAUTHORIZED",message:"User not authenticated"})
         const usersCollection = db.collection('users')
-        const user = await usersCollection.findOne({ _id: opts.ctx.user._id });
+        const user = await usersCollection.findOne({ _id: opts.ctx.user });
         if(user){
             return {
                 message:"success",
                 user,
             }
-        }else{
-            return {
-                message:"User not found",
-            }
         }
-
     })
 })
