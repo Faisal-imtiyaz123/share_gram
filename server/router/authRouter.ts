@@ -3,6 +3,7 @@ import * as z from "zod"
 import { comparePassword, generateAuthToken, hashPassword, setAuthTokenCookie } from '../utils/authUtils';
 import { TRPCError, initTRPC} from '@trpc/server';
 import { publicProcedure, router } from '../trpc';
+import {ObjectId} from "mongodb"
 
 
 export const authRouter = router({
@@ -29,7 +30,7 @@ export const authRouter = router({
         }
       }
       const token = generateAuthToken(user._id)
-      setAuthTokenCookie(opts.ctx.res, token);
+      // setAuthTokenCookie(opts.ctx.res, token);
       if(user){
         return {
             message:"success",
@@ -65,15 +66,26 @@ export const authRouter = router({
     return { message: 'Signup successful' };
       }),
     currentUser:publicProcedure.query(async (opts)=>{
+      try{
+
         const db = await connectToDatabase()
-        if(!opts.ctx.user) throw new TRPCError({code:"UNAUTHORIZED",message:"User not authenticated"})
+        if(!opts.ctx.user) return {
+          message:"User not found. Please login again",
+          user:null
+        }
         const usersCollection = db.collection('users')
-        const user = await usersCollection.findOne({ _id: opts.ctx.user });
+        const user = await usersCollection.findOne({ _id: new ObjectId(opts.ctx.user.data) })
         if(user){
             return {
                 message:"success",
                 user,
             }
         }
-    })
+      }catch(err:any){
+        return {
+            message:err.message,
+            user:null
+        }
+      }
+    }),
 })
