@@ -1,10 +1,32 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { trpc } from "./lib/trpc";
 import { httpBatchLink } from "@trpc/client";
 import { getAuthCookie } from "./lib/actions/auth/auth.actions";
-import { Outlet } from "react-router-dom";
 import ProtectedRoute from "./components/customAuth/ProtectedRoute";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import Home from "./routes/Home";
+import { LoginForm } from "./components/customAuth/LoginForm";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import SignUpForm from "./components/customAuth/SignUpForm";
+import AccountProfile from "./components/forms/AccountProfile";
+
+// export function SignOut(){
+//   const navigate = useNavigate()
+//   useEffect(()=>{
+//     if(!localStorage.getItem('auth'))  navigate('/login')
+//   },[navigate])
+
+
+//   return(
+//     <div>
+
+//     </div>
+//   )
+
+// }
+
+
 
 export default function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -12,11 +34,16 @@ export default function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: 'http://localhost:3000/trpc',
+          url: "http://localhost:3000/trpc",
           // You can pass any HTTP headers you wish here
-          async headers() {
+          headers: async (opts) => {
+            const {path} = opts.opList[0]
+            console.log(path)
+            if(path == "auth.login") return {
+              auth:"pass"
+            }
             return {
-            Authorization: getAuthCookie(),
+              authorization: getAuthCookie()
             };
           },
         }),
@@ -26,10 +53,24 @@ export default function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-      <ProtectedRoute>
-        <Outlet/>
-      </ProtectedRoute>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                  <Home />
+              }
+            >
+              <Route path="/profile" element={<AccountProfile/>}/>
+            </Route>
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/signup" element={<SignUpForm />} />
+            {/* <Route path="/signout" element={<SignOut/>} /> */}
+          </Routes>
+        </BrowserRouter>
       </QueryClientProvider>
     </trpc.Provider>
-  )
+  );
 }
+
