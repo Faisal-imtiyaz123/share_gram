@@ -10,7 +10,9 @@ let dbConnection: any;
 export async function connectToDatabase() {
   if (!dbConnection) {
     await client.connect();
+    console.log("db connected")
     dbConnection = client.db('share_gram'); // Replace with your database name
   }
+  console.log("db already connected")
   return dbConnection;
 }
