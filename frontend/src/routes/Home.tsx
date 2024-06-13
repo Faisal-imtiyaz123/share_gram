@@ -1,7 +1,10 @@
+import { LoginForm } from "@/components/customAuth/LoginForm";
+import SignUpForm from "@/components/customAuth/SignUpForm";
 import { CreateModal } from "@/components/uiCustom/Modals/CreateModal";
 import LeftSideBar from "@/components/uiCustom/Navigation/LeftSideBar";
 import NotificationSlider from "@/components/uiCustom/Notifications/NotificationSlider";
 import SearchBar from "@/components/uiCustom/Search/searchBar";
+import { getAuthCookie } from "@/lib/actions/auth/auth.actions";
 import { RefProvider } from "@/lib/hooks/useContext";
 import { trpc } from "@/lib/trpc";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -17,11 +20,11 @@ export default function Home() {
         httpBatchLink({
           url: 'http://localhost:3000/trpc',
           // You can pass any HTTP headers you wish here
-          // async headers() {
-          //   return {
-          //     authorization: getAuthCookie(),
-          //   };
-          // },
+          async headers() {
+            return {
+            Authorization: getAuthCookie(),
+            };
+          },
         }),
       ],
     }),
@@ -36,6 +39,7 @@ export default function Home() {
         <LeftSideBar /> 
         <SearchBar/>
         <NotificationSlider/>
+        <LoginForm/>
         </div>
         {/* <CreateModal/> */}
       </RefProvider> 
