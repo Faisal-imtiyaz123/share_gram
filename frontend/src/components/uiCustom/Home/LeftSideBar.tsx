@@ -62,7 +62,7 @@ export default function LeftSideBar() {
         </>
         <> 
         <Link 
-          to="/home/messaging"
+          to="/message"
           className="flex gap-4 items-center p-3 hover:bg-gray-100 rounded-lg" >
            <MessageCircle/>
           <div className={navLinkClassname}>Messaging</div>
