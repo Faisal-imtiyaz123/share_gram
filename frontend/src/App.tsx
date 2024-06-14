@@ -10,7 +10,8 @@ import { LoginForm } from "./components/customAuth/LoginForm";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import SignUpForm from "./components/customAuth/SignUpForm";
 import AccountProfile from "./components/forms/AccountProfile";
-
+import {Toaster} from "react-hot-toast"
+import MessagingSideBar from "./components/uiCustom/Messaging/MessagingSideBar";
 // export function SignOut(){
 //   const navigate = useNavigate()
 //   useEffect(()=>{
@@ -54,6 +55,7 @@ export default function App() {
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
+            <Toaster/>
         <BrowserRouter>
           <Routes>
             <Route
@@ -63,6 +65,9 @@ export default function App() {
               }
             >
               <Route path="/profile" element={<AccountProfile/>}/>
+              <Route path="/message" element={<MessagingSideBar/>}>
+                {/* <Route path="/:id" /> */}
+              </Route>
             </Route>
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignUpForm />} />
