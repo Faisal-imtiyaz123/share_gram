@@ -4,6 +4,7 @@ import express from 'express';
 import {authRouter} from './router/authRouter'
 import cors from "cors"
 import { verifyJwt } from './utils/authUtils';
+import { userRouter } from './router/userRouter';
 
 // created for each request
 const createContext = async (opts: trpcExpress.CreateExpressContextOptions)=> {
@@ -34,7 +35,8 @@ const t = initTRPC.context<Context>().create();
 const router = t.router
 
 const appRouter = router({
-  auth:authRouter
+  auth:authRouter,
+  user:userRouter
 });
 export type AppRouter  = typeof appRouter
 const app = express();

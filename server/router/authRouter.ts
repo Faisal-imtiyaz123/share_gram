@@ -1,7 +1,6 @@
 import { connectToDatabase } from '../db';
 import * as z from "zod"
 import { comparePassword, generateAuthToken, hashPassword, setAuthTokenCookie } from '../utils/authUtils';
-import { TRPCError, initTRPC} from '@trpc/server';
 import { publicProcedure, router } from '../trpc';
 import {ObjectId} from "mongodb"
 
