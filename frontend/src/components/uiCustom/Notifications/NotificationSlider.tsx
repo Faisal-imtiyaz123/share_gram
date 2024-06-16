@@ -28,7 +28,7 @@ export default function NotificationSlider() {
   return (
     <div
       ref={sheetRef}
-      className={` ${isOpen?"fixed":''} left-[5rem] h-screen bg-gray-100 
+      className={` ${isOpen?"fixed":''}  
        ${ isOpen ? " w-[25rem] animate-slideOut" : opened?'animate-slideIn':''} shadow-lg border-r z-10 bg-white`}
     >
       {isOpen && 

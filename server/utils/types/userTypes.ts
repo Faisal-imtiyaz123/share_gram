@@ -1,12 +1,17 @@
-import { ObjectId } from "mongoose"
+import { ObjectId } from "mongodb"
+
 export interface User{
     username: string
-    password: string
+    password: string,
+    appUsername: string,
     name:string
     bio:string
-    posts: ObjectId[] | [],
-    followers:ObjectId[] | [],
-    following: ObjectId[] | [],
+    posts: ObjectId[] ,
+    followers:ObjectId[] 
+    following: ObjectId[],
     onboarded:boolean,
-    privateAccount:boolean
+    privateAccount:boolean,
+    profilePicture:string,
+    messageUsers:ObjectId[] 
 }
+export type DbUser = User & {_id:ObjectId}

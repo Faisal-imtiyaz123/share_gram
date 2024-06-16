@@ -1,8 +1,10 @@
 import { connectToDatabase } from '../db';
 import * as z from "zod"
-import { comparePassword, generateAuthToken, hashPassword, setAuthTokenCookie } from '../utils/authUtils';
+import { comparePassword, generateAuthToken, generateUserTemplate, hashPassword, setAuthTokenCookie } from '../utils/authUtils';
 import { publicProcedure, router } from '../trpc';
 import {ObjectId} from "mongodb"
+import { TRPCError } from '@trpc/server';
+import { DbUser, User } from '../utils/types/userTypes';
 
 
 export const authRouter = router({
@@ -16,10 +18,10 @@ export const authRouter = router({
       const usersCollection = db.collection('users')
       const user = await usersCollection.findOne({ username})
       if(!user){
-        return {
-            message:"Invalid username or password",
-            token:""
-        }
+       throw new TRPCError({
+        code:"NOT_FOUND",
+        message:"Invalid username or password"
+       })
       }
       const passwordMatch = await comparePassword(password, user.password);
       if (!passwordMatch) {
@@ -33,7 +35,7 @@ export const authRouter = router({
       if(user){
         return {
             message:"success",
-            token,
+            token
         }
       }else{
         return {
@@ -46,6 +48,7 @@ export const authRouter = router({
     signUp:publicProcedure.input(z.object({
         username: z.string().min(1, "Username is required"),
         password: z.string().min(1, "Password is required"),
+        confirmPassword: z.string().min(1, "Confirm Password is required"),
       }))
       .mutation(async ({ input }) => {
         const { username, password } = input;
@@ -53,38 +56,34 @@ export const authRouter = router({
         const usersCollection = db.collection('users')
         const existingUser = await usersCollection.findOne({ username });
         if (existingUser) {
-        return { message: 'Username already exists' };
+        throw new TRPCError({
+            code:"BAD_REQUEST",
+            message:"username is taken"
+        })
        }
 
     // Hash the password securely before storing it
     const hashedPassword = await hashPassword(password);
 
-    const newUser = { username, password: hashedPassword };
-    await usersCollection.insertOne(newUser);
+    const userTemplate  = generateUserTemplate()
+    await usersCollection.insertOne({...userTemplate,username:username,password:hashedPassword});
 
     return { message: 'Signup successful' };
       }),
-    currentUser:publicProcedure.query(async (opts)=>{
-      try{
-
+    currentUser:publicProcedure.
+    query(async (opts)=>{
         const db = await connectToDatabase()
-        if(!opts.ctx.user) return {
-          message:"User not found. Please login again",
-          user:null
-        }
+        if(!opts.ctx.user) throw new TRPCError({code:"UNAUTHORIZED",message:"User not authenticated"})
         const usersCollection = db.collection('users')
-        const user = await usersCollection.findOne({ _id: new ObjectId(opts.ctx.user.data) })
-        if(user){
-            return {
-                message:"success",
-                user,
-            }
-        }
-      }catch(err:any){
-        return {
-            message:err.message,
-            user:null
-        }
+        const user:DbUser = await usersCollection.findOne({ _id: new ObjectId(opts.ctx.user.data) })
+        if(!user){
+           throw new TRPCError({
+            code:"NOT_FOUND",
+            message:"User not found. Please signg up"
+           })
+      }
+      return {
+        user
       }
     }),
 })

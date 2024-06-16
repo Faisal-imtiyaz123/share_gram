@@ -13,6 +13,8 @@ import {
 import { Input } from "@/components/ui/input"
 import {useForm} from "react-hook-form"
 import { useState } from "react"
+import { trpc } from "@/lib/trpc"
+import toast from "react-hot-toast"
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -31,7 +33,15 @@ const formSchema = z.object({
 })
 
 export default function SignUpForm() {
-  const [errors,setErrors]=useState<{path:string,error:string}[]>([])
+  // const [errors,setErrors]=useState<{path:string,error:string}[]>([])
+  const mutatation = trpc.auth.signUp.useMutation({
+    onError:(error)=>{
+      toast.error(`Sign up failed: ${error.message}`)
+    },
+    onSuccess:()=>{
+      toast.success("Sign up successful")
+    }
+  })
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,17 +53,14 @@ export default function SignUpForm() {
 
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    setErrors([])
-    if(values.confirmPassword!==values.password){
-      setErrors([...errors,{path: "confirmPassword",error:"Passwords do not match"}])
-      return
-    }
-  
+    mutatation.mutate(values)
   }
 
   return (
+    <div className="flex justify-center h-screen">
+
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-[40vw] mt-[5rem] shadow-lg h-[50vh] p-4 border-2 rounded-lg">
         <FormField
           control={form.control}
           name="username"
@@ -105,5 +112,6 @@ export default function SignUpForm() {
         <Button type="submit">Submit</Button>
       </form>
     </Form>
+    </div>
   )
 }

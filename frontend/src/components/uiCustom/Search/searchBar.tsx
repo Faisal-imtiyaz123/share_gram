@@ -30,7 +30,7 @@ export default function SearchBar() {
   return (
     <div
       ref={sheetRef}
-      className={` ${isOpen?'fixed':''} left-[5rem] h-screen border-r z-10 shadow-lg bg-whitw flex flex-col
+      className={` ${isOpen?'fixed':''}  h-screen border-r  bg-white flex flex-col
        ${ isOpen ? " w-[25rem] animate-slideOut" : opened?'animate-slideIn':''}`}
        >
       {isOpen && 

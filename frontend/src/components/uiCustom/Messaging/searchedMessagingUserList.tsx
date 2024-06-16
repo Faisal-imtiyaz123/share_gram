@@ -1,11 +1,11 @@
-import { otherUser } from "@/lib/types/otherUsersTypes";
+import { messageUsersDetails } from "@/lib/types/messageTypes";
 import MessageUser from "./MessageUser";
 
 
-export default function SearchedMessagingUserList() {
+export default function SearchedMessagingUserList({messageUsersArr}:{messageUsersArr:messageUsersDetails[]}) {
   return (
     <div className="mt-2 flex flex-col gap-2">
-        {matchingUsers.map(user=><MessageUser key={user._id.toString()} user={user}/>)}
+        {messageUsersArr.map(user=><MessageUser key={user._id.toString()} user={user}/>)}
     </div>
   )
 }

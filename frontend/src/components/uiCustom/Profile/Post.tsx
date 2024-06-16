@@ -1,46 +1,22 @@
-"use client"
-import { DbPost } from "@/lib/types/postTypes";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { DbPost } from "@/lib/types/postTypes";
+import { Link } from 'react-router-dom';
 
 
 
-export default function Post({postObj}:{postObj:{post:string[],postId:string}}) {
- const router = useRouter()
- const {post,postId} = postObj
- const postLength = post.length
+
+export default function Post({post}:{post:DbPost}) {
   return (
-    postLength >1 ?
-     <div className="">
-     
-            {post.map((postEl,index)=>
-            <div  key={index}>
-                <Link href={`/home/post/${postId.toString()}`}>
-                <Image priority width={200} height={200} alt="post" src={postEl}/>
-                </Link>
-
-            </div>
-            
-            )}
-           
-     </div>
-   
-  :
-    
-    <div className="relative">
-      <Link href={`/home/post/${postId.toString()}`}>
-        <Image priority width={200} height={200} alt="post" src={post[0]}/>
+     <div className=" border w-[20rem] h-[20rem]">
+       <Link to={`/post/${post._id.toString()}`}>
+                <img  alt="post" src={post.photo[0]}/>
       </Link>
-   
-
-    </div>
+     </div>
     
   )
 }

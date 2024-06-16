@@ -1,9 +1,11 @@
 import { connectToDatabase } from '../db';
 import * as z from "zod"
-import { comparePassword, generateAuthToken, hashPassword, setAuthTokenCookie } from '../utils/authUtils';
+import { comparePassword, generateAuthToken, generateUserTemplate, hashPassword, setAuthTokenCookie } from '../utils/authUtils';
 import { publicProcedure, router } from '../trpc';
 import {ObjectId} from "mongodb"
 import { TRPCError } from '@trpc/server';
+import { DbUser, User } from '../utils/types/userTypes';
+import { removeId } from '../utils/removeId';
 
 
 export const userRouter = router({
@@ -18,34 +20,53 @@ export const userRouter = router({
         const db = await connectToDatabase()
         const usersCollection = db.collection('users')
         const currentUser = await usersCollection.findOne({ _id: new ObjectId(opts.ctx.user?.data) })
-        console.log(opts.ctx.user)
         if (!currentUser) {
             throw new   TRPCError({
                 code:'NOT_FOUND',
                 message:"User not found, login again"
             });
         }
-        const updatedUser = {
-            ...currentUser,
+        const currentUserTrimmed = removeId<User>(currentUser)
+        const userTemplate = generateUserTemplate()
+        const updatedUser:User = {
+            ...userTemplate,
+            ...currentUserTrimmed,
             name,
             bio,
-            username,
+            appUsername:username,
             profilePicture,
         };
-        console.log(currentUser)
        
         // Update the user in the database
         const result = await usersCollection.updateOne(
             { _id: new ObjectId(opts.ctx.user?.data) },
             { $set: updatedUser }
         );
-        console.log(result)
 
-        // if (result.modifiedCount === 0) {
-        //     throw new TRPCError({
-        //         code:"INTERNAL_SERVER_ERROR",
-        //         message:"Failed to update user, try again"
-        //     });
-        // }
+        if (result.modifiedCount === 0) {
+            throw new TRPCError({
+                code:"INTERNAL_SERVER_ERROR",
+                message:"Failed to update user, try again"
+            });
+        }
     }),
+    fetchUser:publicProcedure.input(z.object({
+        userId:z.string().min(1,{message:"UserId is required" }),
+    })).output((value)=>{
+        return value as DbUser
+    })
+    .query(async (opts)=>{
+        const db = await connectToDatabase()
+        const usersCollection = db.collection('users')
+        const user = await usersCollection.findOne({ _id: new ObjectId(opts.input.userId) })
+        if (!user) {
+            throw new TRPCError({
+                code:"NOT_FOUND",
+                message:"User not found"
+            });
+        }
+        return user
+
+        })
+
 })

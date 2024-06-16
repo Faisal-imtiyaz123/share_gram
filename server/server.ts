@@ -1,10 +1,12 @@
-import { initTRPC } from '@trpc/server';
+import { TRPCError, initTRPC } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import express from 'express';
 import {authRouter} from './router/authRouter'
 import cors from "cors"
 import { verifyJwt } from './utils/authUtils';
 import { userRouter } from './router/userRouter';
+import { messageRouter } from './router/messageRouter';
+import { postRouter } from './router/postRouter';
 
 // created for each request
 const createContext = async (opts: trpcExpress.CreateExpressContextOptions)=> {
@@ -17,9 +19,16 @@ const createContext = async (opts: trpcExpress.CreateExpressContextOptions)=> {
   async function getUserFromHeader() {
     if (opts.req.headers.authorization) {
       const user = await verifyJwt(opts.req.headers.authorization.split(' ')[1]);
+      if(!user) throw new TRPCError({
+        code: 'UNAUTHORIZED',
+        message: 'You must be logged in to do this',
+     });
       return user;
     }
-    return null;
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'You must be logged in to do this',
+   });
   }
   const user = await getUserFromHeader();
   return {
@@ -36,7 +45,9 @@ const router = t.router
 
 const appRouter = router({
   auth:authRouter,
-  user:userRouter
+  user:userRouter,
+  message:messageRouter,
+  posts:postRouter
 });
 export type AppRouter  = typeof appRouter
 const app = express();

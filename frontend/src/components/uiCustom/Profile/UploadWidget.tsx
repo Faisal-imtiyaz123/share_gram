@@ -11,8 +11,8 @@ const CloudinaryUploadWidget = ({setUploadedImageUrl}:{setUploadedImageUrl:Dispa
         script.onload = () => {
             // @ts-ignore
             const myWidget = window.cloudinary.createUploadWidget({
-                cloudName: 'dywebzylz', // Replace with your Cloudinary cloud name
-                uploadPreset: 'xzsnd6c8', // Replace with your Cloudinary upload preset
+                cloudName: process.env.VITE_CLOUD_NAME, // Replace with your Cloudinary cloud name
+                uploadPreset: process.env.VITE_UPLAOD_PRESET, // Replace with your Cloudinary upload preset
                 showUploadMoreButton: true,
                 singleUploadAutoClose: false
             }, (error: any, result: any) => {
@@ -34,11 +34,11 @@ const CloudinaryUploadWidget = ({setUploadedImageUrl}:{setUploadedImageUrl:Dispa
         return () => {
             document.body.removeChild(script);
         };
-    }, []);
+    }, [setUploadedImageUrl]);
 
     return (
         <div>
-            <Button id="upload_button">Upload Image</Button>
+            <Button variant="secondary" id="upload_button">Upload Image</Button>
         </div>
     );
 };

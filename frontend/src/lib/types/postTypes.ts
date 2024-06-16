@@ -1,9 +1,17 @@
-import mongoose from "mongoose";
 
  export interface DbPost{
-    post:string[],
+    photo: string[]
     comments:string[],
-   _id:mongoose.Schema.Types.ObjectId,
+   _id:string,
+    authorId:string,
+    time:{
+        day:string,
+        time:string,
+        year:string
+    },
+    text:string,
+    likes:number,
+    usersThatLiked:string[]
  }
 
-export type createdPost = string[]
+

@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { trpc } from "@/lib/trpc"
 import { useNavigate } from "react-router-dom"
-import { useEffect } from "react"
+import toast from "react-hot-toast"
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -27,13 +27,19 @@ const FormSchema = z.object({
 })
 export function LoginForm() {
   const navigate = useNavigate()
+  // const {data:curentUser}= trpc.auth.currentUser.useQuery()
   const mutatation = trpc.auth.login.useMutation(
-    {onSuccess:(data)=>{
+    {
+      onSuccess:(data)=>{
       localStorage.setItem('auth',data.token)
       navigate('/')
-    }},
+      }
+    ,
+    onError:(err)=>{
+      toast.error(err.message)
+    }
+  }
   )
-  const {data:curentUser}= trpc.auth.currentUser.useQuery()
   
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -42,9 +48,9 @@ export function LoginForm() {
       password: ""
     },
   })
-  useEffect(()=>{
-    if(curentUser) navigate('/')
-    },[navigate,curentUser]);
+  // useEffect(()=>{
+  //   if(curentUser) navigate('/')
+  //   },[navigate,curentUser]);
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
     mutatation.mutate(values)
@@ -52,8 +58,9 @@ export function LoginForm() {
 }
 
   return (
+    <div className="flex justify-center mt-[8rem] h-screen">
   <Form {...form}>
-    <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="w-[40vw] h-[40vh] shadow-lg p-4 border-2 rounded-lg space-y-6">
       <FormField
         control={form.control}
         name="username"
@@ -89,5 +96,6 @@ export function LoginForm() {
       <Button type="submit">Submit</Button>
     </form>
   </Form>
+    </div>
 )
 }

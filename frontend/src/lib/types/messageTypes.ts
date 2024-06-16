@@ -1,16 +1,26 @@
-import mongoose from "mongoose";
-import { BlockList } from "net";
+import  { ObjectId } from "mongodb";
 
-export interface messageObj{
-    _id:mongoose.Schema.Types.ObjectId,
-    message:string,
-    senderId:mongoose.Schema.Types.ObjectId,
-    recieverId:mongoose.Schema.Types.ObjectId,
-    sent?:true,
+export interface messageUsers {
+    _id :ObjectId
+    messageUsersDetails :messageUsersDetails[]
+
 }
-export interface RenderedMessageObj{
-    id:string
-    message:string,
-    sent?:boolean
 
+export interface messageUsersDetails{
+    _id :ObjectId
+    username :string
+    profilePhoto :string
+    name :string
+}
+export interface Message{
+    _id :string
+    message :string
+    senderId :string
+    receiverId :string
+    sent :boolean
+    time:{
+        day :string
+        time :string
+        year :string
+    }
 }

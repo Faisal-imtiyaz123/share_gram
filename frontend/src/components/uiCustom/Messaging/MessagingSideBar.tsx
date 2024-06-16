@@ -1,11 +1,15 @@
+import { trpc } from "@/lib/trpc";
 import SearchedMessagingUserList from "./searchedMessagingUserList";
+import { messageUsers } from "@/lib/types/messageTypes";
 
-export default function MessagingSideBar() {
+export default function MainMessagingPage() {
+  const {data}:{data:messageUsers[]|undefined} = trpc.message.fetchMessageUsers.useQuery()
+  if(!data) return null
   
  
   
   return (
-    <div className="w-[18rem] border-r h-screen">
+    <div className="basis-[25%] border-r h-screen">
       <div className="flex flex-col p-4 gap-2">
         <h1 className="text-xl bold">Messages</h1>
         {/* <Input
@@ -16,11 +20,10 @@ export default function MessagingSideBar() {
               (followingUsers?.filter((followingUser)=>followingUser.name.match(regExp) || followingUser.username.match(regExp))):
               [])
   
-          
           }}
         /> */}
       </div>
-      <SearchedMessagingUserList matchingUsers={matchingUsers}/>
+      <SearchedMessagingUserList messageUsersArr={data[0]?.messageUsersDetails}/>
     </div>
   );
 }

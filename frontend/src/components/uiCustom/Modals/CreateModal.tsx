@@ -1,20 +1,34 @@
 import { useCreateModal } from "@/lib/Zustand-store/createModalStore";
-import { useUploadThing } from "@/lib/uploadthing";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod"
+import ImageSlider from "../Create/ImageSlider";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import axios from "axios"
+import toast from "react-hot-toast";
+import { trpc } from "@/lib/trpc";
+
 const filesSchema = z.object({
   files: z.string().nonempty(),
 });
 
 export function CreateModal() {
+  const mutation = trpc.posts.createPost.useMutation({
+    // onError: ()=>toast.error("Failed to create post"),
+    onSuccess:()=>toast.success("Post created successfully"),
+    
+  })
+  const [urls,setUrls ] = useState<string[]>([])
   const { isModalOpen, toggleModal } = useCreateModal();
   const modalRef = useRef<HTMLDivElement>(null);
+  const [previews,setPreviews] = useState<string[]>([])
   const [files, setFiles] = useState<File[]>([]);
-  const [previews,setPreview] = useState<string[]>([]) 
   const inputRef = useRef<HTMLInputElement>(null)
-  const {startUpload} = useUploadThing("media",{onUploadError:(err)=>console.log(`${err.message}`)})
+ 
+  
   const form = useForm({
     resolver: zodResolver(filesSchema),
     defaultValues: {
@@ -26,7 +40,7 @@ export function CreateModal() {
     function handleOutSideClick(e: MouseEvent) {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         toggleModal();
-        // setPreview([])
+        setPreviews([])
       }
     }
     document.addEventListener("mousedown", handleOutSideClick);
@@ -35,30 +49,47 @@ export function CreateModal() {
     };
   }, [toggleModal]);
 
-  async function handleFiles(e:ChangeEvent<HTMLInputElement>,fieldChange:(fieldValue:string)=>void){
-    const selectedFiles = e.target.files
-    if(!selectedFiles) return
-    const filesArr:File[] = Array.from(selectedFiles)
-    setFiles(filesArr)
-    let promiseArr:Promise<string>[] =[]
-    for(const file of filesArr){
-    const fileReader = new FileReader()
-    const promise = new Promise<string> ((resolve,reject)=>{
-      fileReader.onload = ()=>{
-        const fileUrl = fileReader.result?.toString()||""
-        fieldChange(fileUrl)
-        resolve(fileUrl)
   
-      }
-      fileReader.readAsDataURL(file)
-
-
+  async function handleFiles(e:ChangeEvent<HTMLInputElement>){
+    const files:File[]= Array.from(e.target.files);
+    setFiles(files)
+    if(!files) return 
+    Promise.all(
+    files.map((file)=>{
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result?.toString() as string);
+          reader.onerror = (error) => reject(error);
+          reader.readAsDataURL(file);
+        });
+      
     })
-    promiseArr.push(promise)
-    }
-    const fileUrls = await Promise.all(promiseArr)
-    setPreview(fileUrls)
+    ).then((urlArray)=>{
+      setPreviews(urlArray as string[] )
+      
+    })
+  
 
+    // Promise.all(
+    //   files.map((file) => {
+    //     return new Promise<string>((resolve) => {
+    //       const reader = new FileReader();
+    //       reader.onloadend = () => {
+    //         const result = reader.result as ArrayBuffer; // Explicitly cast to ArrayBuffer
+    //         const base64String = btoa(
+    //           new Uint8Array(result).reduce(
+    //             (data, byte) => data + String.fromCharCode(byte),
+    //             ''
+    //           )
+    //         );
+    //         resolve(`data:${file.type};base64,${base64String}`);
+    //       };
+    //       reader.readAsArrayBuffer(file);
+    //     });
+    //   })
+    // ).then((imagesArray) => {
+    //   setSelectedImages((prevImages) => [...prevImages, ...imagesArray]);
+    // });
   }
 
   async function onSubmit(values:z.infer<typeof filesSchema>){
@@ -68,35 +99,36 @@ export function CreateModal() {
     
   }
   async function handlePost(){
-    let post:string[]=[]
-    for(const file of files){
-      try{
-        const fileArray:File[] = []
-        fileArray.push(file)
-        const uploadRes = await startUpload(fileArray)
-        if(!uploadRes) throw new Error("Error uplaoding data:::")
-        post.push(uploadRes[0].url)
+  
+    const uploadImages = files.map(image => {
+      const formData = new FormData();
+      formData.append('file', image);
+      formData.append('upload_preset', 'xzsnd6c8'); // Replace with your upload preset
+      formData.append('cloud_name', 'dywebzylz'); // Replace with your cloud name
 
-      }catch(err:any){
-        throw new Error(`Error Posting files:${err.message} `)
-      }
-    }
-
-    await createPost(post)
-
+      return axios.post(
+        `https://api.cloudinary.com/v1_1/dywebzylz/image/upload`, // Replace with your cloud name
+        formData
+      ).then(response => {
+        setUrls(prevUrls => [...prevUrls, response.data.secure_url]);
+        
+      }).catch(error => {
+        console.error('Error uploading the image:', error);
+      });
+    });
+    // toast.promise(Promise.all(uploadImages),{
+    //   loading:"Creating post",
+    //   success:"Post created successfully",
+    //   error:"Failed to create post"
+    // });
+    toast.loading("Creating post")
+    await Promise.all(uploadImages);
+    toast.dismiss()
+    mutation.mutate({text:"",photo:urls})
   }
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
- 
-
   return (
     isModalOpen && (
-      <div className="w-screen h-screen bg-black  z-10 bg-opacity-50 fixed flex items-center justify-center ">
+      <div className="w-screen h-screen bg-black z-50 bg-opacity-50 fixed flex items-center justify-center ">
         <div
           ref={modalRef}
           className=" bg-white w-[30rem] z-30 h-[35rem] rounded-xl flex flex-col "
@@ -108,10 +140,15 @@ export function CreateModal() {
               :"Create Post"}
           </div>
          
-
-         {!previews.length? <div className="basis-[80%] relative ">Drag files from your Computer</div>:""}
-          
+<div className="flex flex-1 flex-col">
+    <div className="basis-[90%]">
+         {previews.length>1?  
           <ImageSlider previews={previews} />
+        :
+        <img src={previews[0]} />
+        }
+    </div>
+
           <div>
             <Form  {...form}>
               <form  onSubmit={form.handleSubmit(onSubmit)}>
@@ -133,7 +170,6 @@ export function CreateModal() {
                             className="cursor-pointer hidden"
                             multiple
                           />
-                          
                         </FormControl>
                       </div>
                       <FormMessage />
@@ -152,6 +188,9 @@ export function CreateModal() {
             </Form>
          
           </div>
+
+</div>
+          
         </div>
       </div>
     )

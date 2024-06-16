@@ -4,12 +4,10 @@ import { useCreateModal } from "@/lib/Zustand-store/createModalStore"
 import useRefContext from "@/lib/hooks/useContext"
 import { Heart, Home, MessageCircle, PlusCircle, Search } from "lucide-react"
 import { Link } from "react-router-dom"
+import { trpc } from "@/lib/trpc"
+import { imgPublicId } from "@/lib/utils"
+import { CloudinaryImage } from "../Profile/CloudinaryImage"
 import { MoreDropDown } from "../More/MoreDialog"
-
-
-
-
-
 
 export default function LeftSideBar() {
   const {isOpen:isSearchSliderOpen} = useSearchStore()
@@ -20,8 +18,10 @@ export default function LeftSideBar() {
   const {toggle:notificationToggle} = useNotificationSliderStore()
   const {toggle:searchToggle} = useSearchStore(state=>state)
   const {toggleModal,isModalOpen} = useCreateModal()
+  const currentUser = trpc.auth.currentUser.useQuery()
+  const publicId = imgPublicId(currentUser.data?.user.profilePicture?currentUser.data?.user.profilePicture:"" )
 
-  
+ 
   function handleSearchClick(){
   searchToggle() 
  }
@@ -30,7 +30,7 @@ export default function LeftSideBar() {
 
  }
   return (
-    <div className={`flex flex-col h-screen border border-r pl-2 p-4 gap-2 w-[15rem] ${isAnySliderOpen?'w-[5rem]':''}`}>
+    <div className={`flex flex-col h-[100vh] border border-r pl-2 p-4 gap-2 w-[15rem] ${isAnySliderOpen?'w-[5rem]':''}`}>
       <h1 className="text-[20px] pl-2 text-gray-600 mb-4">Threads</h1>
       <div className="flex flex-col gap-3 justify-center ">
       <> 
@@ -79,13 +79,13 @@ export default function LeftSideBar() {
         </div>
        </>
         <Link
-          to="/home/profile"
+          to="/my-profile"
           className="flex gap-4 items-center p-3 hover:bg-gray-100 rounded-lg" >
-          <image  href={``} height={24} width={24}/>
+          <CloudinaryImage publicId={publicId} />
           <div className={navLinkClassname}>Profile</div>
         </Link>
       </div>
-      {/* <MoreDropDown/> */}
+      <MoreDropDown/>
     </div>
   );
 }

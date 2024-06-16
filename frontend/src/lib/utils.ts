@@ -9,3 +9,9 @@ export function isBase64Image(data:string) {
   const base64Regex = /^data:image\/(png|gif|jpeg);base64,/;
   return base64Regex.test(data);
 }
+
+export const imgPublicId = (img:string)=>{
+  if(!img) return ""
+  const parts = img.split('/')
+  return parts[7].split('.')[0]
+}
