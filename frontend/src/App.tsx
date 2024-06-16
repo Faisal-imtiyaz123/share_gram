@@ -1,46 +1,48 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
 import { trpc } from "./lib/trpc";
-import { httpBatchLink } from "@trpc/client";
+import {  httpBatchLink } from "@trpc/client";
 import { getAuthCookie } from "./lib/actions/auth/auth.actions";
-import ProtectedRoute from "./components/customAuth/ProtectedRoute";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import Home from "./routes/Home";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./routes/Index";
 import { LoginForm } from "./components/customAuth/LoginForm";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import SignUpForm from "./components/customAuth/SignUpForm";
-import AccountProfile from "./components/forms/AccountProfile";
-import {Toaster} from "react-hot-toast"
-import MessagingSideBar from "./components/uiCustom/Messaging/MessagingSideBar";
-// export function SignOut(){
-//   const navigate = useNavigate()
-//   useEffect(()=>{
-//     if(!localStorage.getItem('auth'))  navigate('/login')
-//   },[navigate])
+import AccountProfile from "./components/forms/ProfileForm";
+import  {Toaster} from "react-hot-toast"
+import Message_id from "./routes/Message_id";
+import MessageRoute from "./routes/MessageRoute";
+import MyProfilePage from "./routes/MyProfile";
+import HomePage from "./routes/HomePage";
+import { globalErrorHandler } from "./lib/globalErrorHandler";
 
+// 
 
-//   return(
-//     <div>
-
-//     </div>
-//   )
-
-// }
 
 
 
 export default function App() {
-  const [queryClient] = useState(() => new QueryClient());
+  const queryClient = new QueryClient({
+    queryCache: new QueryCache({
+      onError: (err) => {
+        globalErrorHandler(err)
+      }
+    }),
+    mutationCache: new MutationCache({
+      onError: (err) => {
+       globalErrorHandler(err)
+      },
+    })
+  });
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
         httpBatchLink({
           url: "http://localhost:3000/trpc",
           // You can pass any HTTP headers you wish here
-          headers: async (opts) => {
+          headers:(opts) => {
             const {path} = opts.opList[0]
-            console.log(path)
-            if(path == "auth.login") return {
+            if(path == "auth.login" || path=="auth.signUp") return {
               auth:"pass"
             }
             return {
@@ -54,7 +56,7 @@ export default function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
             <Toaster/>
         <BrowserRouter>
           <Routes>
@@ -63,10 +65,12 @@ export default function App() {
               element={
                   <Home />
               }
-            >
+            >  
+              <Route path="/home" element={<HomePage/>}/>
+              <Route path="/my-profile" element={<MyProfilePage/>}/>
               <Route path="/profile" element={<AccountProfile/>}/>
-              <Route path="/message" element={<MessagingSideBar/>}>
-                {/* <Route path="/:id" /> */}
+              <Route path="/message" element={<MessageRoute/>}>
+                <Route path="/message/:id" element={<Message_id/>} />
               </Route>
             </Route>
             <Route path="/login" element={<LoginForm />} />
