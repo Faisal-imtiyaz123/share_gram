@@ -7,7 +7,7 @@ This project uses  [React.js](https://react.dev) ( bootstrapped with `npm create
 
 
 
-###Setup UI:
+### Setup UI:
 ```bash
 cd frontend //Go to frontend directory (Execute from share_gram directory)
 ```
@@ -24,7 +24,7 @@ bun dev
 
 Open [http://localhost:5173](http://localhost:5173) with your browser to see the frontend UI.
 
-###Setup the server
+### Setup the server
 ```bash
 cd server // Go to server directory (Execute from share_gram directory) 
 ```
@@ -40,7 +40,7 @@ bun dev
 ```
 This will setup the server at  [http://localhost:3000](http://localhost:3000)
 
-##SECRETS
+## SECRETS
 You will need the following [pusher](https://pusher.com) secrets:
 
 `PUSHER_APP_ID `
