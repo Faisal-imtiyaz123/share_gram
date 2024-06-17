@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import {useForm} from "react-hook-form"
-import { useState } from "react"
 import { trpc } from "@/lib/trpc"
 import toast from "react-hot-toast"
 
@@ -60,7 +59,7 @@ export default function SignUpForm() {
     <div className="flex justify-center h-screen">
 
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-[40vw] mt-[5rem] shadow-lg h-[50vh] p-4 border-2 rounded-lg">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-[40vw] mt-[5rem] shadow-lg h-[25rem] p-4 border-2 rounded-lg space-y-6">
         <FormField
           control={form.control}
           name="username"

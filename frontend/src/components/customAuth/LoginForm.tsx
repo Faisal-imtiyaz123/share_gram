@@ -15,7 +15,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { trpc } from "@/lib/trpc"
 import { useNavigate } from "react-router-dom"
-import toast from "react-hot-toast"
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -35,9 +34,9 @@ export function LoginForm() {
       navigate('/')
       }
     ,
-    onError:(err)=>{
-      toast.error(err.message)
-    }
+    // onError:(err)=>{
+    //   toast.error(err.message)
+    // }
   }
   )
   
@@ -58,9 +57,9 @@ export function LoginForm() {
 }
 
   return (
-    <div className="flex justify-center mt-[8rem] h-screen">
+  <div className="flex bg-red-200 justify-center  h-screen">
   <Form {...form}>
-    <form onSubmit={form.handleSubmit(onSubmit)} className="w-[40vw] h-[40vh] shadow-lg p-4 border-2 rounded-lg space-y-6">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="w-[40vw] mt-[8rem] h-[20rem] shadow-xl p-4 border-2 border-white rounded-lg space-y-6">
       <FormField
         control={form.control}
         name="username"
