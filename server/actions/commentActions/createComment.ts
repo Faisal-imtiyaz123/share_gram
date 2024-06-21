@@ -1,10 +1,10 @@
 "use server"
 
 
-import Comment from "@/lib/Models/CommentModel";
+import Comment from "@/lib/Modals/CommentModel";
 import { revalidatePath } from "next/cache";
 import { stringToMongoId } from "../utils/stringToMongoId";
-import Post from "@/lib/Models/PostModel";
+import Post from "@/lib/Modals/PostModel";
 import { pusher } from "@/lib/pusher";
 
 
