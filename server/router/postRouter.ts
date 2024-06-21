@@ -89,11 +89,41 @@ export const postRouter = router({
             });
         }
         // pusher.trigger('posts', 'updateLikes', opts.input.increase);
+    }),
+    deletePost:publicProcedure.input(z.object({
+        postId:z.string().min(1,{message:"Post ID is required"}),
+    })).mutation(async (opts)=>{
+        const db = await connectToDatabase()
+        const postCollection = await db.collection('posts')
+        const users = db.collection('users')
+        const post = await postCollection.findOne({ _id: new ObjectId(opts.input.postId) })
+        if (!post) {
+            throw new TRPCError({
+                code:'NOT_FOUND',
+                message:"Post not found"
+            });
+        }
+        const result = await postCollection.deleteOne({ _id: new ObjectId(opts.input.postId) })
+        if (result.deletedCount === 0) {
+            throw new TRPCError({
+                code:"INTERNAL_SERVER_ERROR",
+                message:"Failed to delete post, try again"
+            });
+        }
+        await users.updateOne(
+            { _id: new ObjectId(opts.ctx.user?.data) },
+            { $pull: { posts: new ObjectId(opts.input.postId) } }
+        );
+    }),
     })
+    // fetchPostLikes:publicProcedure.input(z.object({
+    //     increase:z.boolean(),
+    //     postId:z.string().min(1,{message:"Post ID is required"})
+    // })).query((opts)=>{
 
+        
+    // })
 
-    
-})
 function updateUsersThatLiked(usersThatLiked:ObjectId[], increase:boolean, userId:ObjectId) {
     if (increase) {
       return [...usersThatLiked, new ObjectId(userId)]; // Add user ID if increasing likes

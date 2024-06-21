@@ -4,7 +4,7 @@ export type DbPost = Post & {_id:ObjectId}
 
 export interface Post{
     photo:string[],
-    comments:string[],
+    comments:ObjectId[],
     authorId:ObjectId,
     time:{
         day:string,

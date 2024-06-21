@@ -7,6 +7,7 @@ import { verifyJwt } from './utils/authUtils';
 import { userRouter } from './router/userRouter';
 import { messageRouter } from './router/messageRouter';
 import { postRouter } from './router/postRouter';
+import { commentsRouter } from './router/commentsRouter';
 
 // created for each request
 const createContext = async (opts: trpcExpress.CreateExpressContextOptions)=> {
@@ -47,7 +48,8 @@ const appRouter = router({
   auth:authRouter,
   user:userRouter,
   message:messageRouter,
-  posts:postRouter
+  posts:postRouter,
+  comments:commentsRouter
 });
 export type AppRouter  = typeof appRouter
 const app = express();

@@ -67,6 +67,16 @@ export const userRouter = router({
         }
         return user
 
-        })
+        }),
+    fetchUsers:publicProcedure.output((out)=>{
+        return out as DbUser[]
+
+    })
+    .query(async ()=>{
+        const db = await connectToDatabase()
+        const usersCollection = db.collection('users')
+        const users = await usersCollection.find().toArray()
+        return users
+    })
 
 })
