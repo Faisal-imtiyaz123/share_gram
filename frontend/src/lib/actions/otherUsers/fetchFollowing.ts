@@ -1,6 +1,6 @@
 "use server"
 
-import User from "@/lib/Models/UserModel"
+import User from "@/lib/Modals/UserModel"
 import { connectToDB } from "@/lib/mongoose"
 
 export async function fetchFollowingUsers(userId:string){

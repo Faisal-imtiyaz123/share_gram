@@ -15,6 +15,7 @@ import MessageRoute from "./routes/MessageRoute";
 import MyProfilePage from "./routes/MyProfile";
 import HomePage from "./routes/HomePage";
 import { globalErrorHandler } from "./lib/globalErrorHandler";
+import ProfilePage from "./routes/ProfilePage";
 
 // 
 
@@ -72,6 +73,7 @@ export default function App() {
               <Route path="/message" element={<MessageRoute/>}>
                 <Route path="/message/:id" element={<Message_id/>} />
               </Route>
+              <Route path="/home/profile/:userId" element={<ProfilePage/>}/>
             </Route>
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignUpForm />} />

@@ -1,9 +1,9 @@
 "use server"
 
-import Thread from "@/lib/Models/ThreadModel";
+import Thread from "@/lib/Modals/ThreadModel";
 import { threadType } from "@/lib/types/threadTypes";import { fetchUser } from "../userActions/fetchUser";
 import { DbUser } from "@/lib/types/userTypes";
-import User from "@/lib/Models/UserModel";
+import User from "@/lib/Modals/UserModel";
 import { revalidatePath } from "next/cache";
 ;
 

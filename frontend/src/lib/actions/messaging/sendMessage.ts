@@ -1,6 +1,6 @@
 "use server"
 
-import Message from "@/lib/Models/Messagemodel"
+import Message from "@/lib/Modals/Messagemodel"
 import { connectToDB } from "@/lib/mongoose"
 import { pusher } from "@/lib/pusher"
 import mongoose from "mongoose"

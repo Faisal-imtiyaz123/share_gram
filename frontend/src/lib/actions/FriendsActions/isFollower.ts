@@ -2,7 +2,7 @@
 
 import { connectToDB } from "@/lib/mongoose"
 import { fetchUserDbId } from "../userActions/fetchUserDbId"
-import User from "@/lib/Models/UserModel"
+import User from "@/lib/Modals/UserModel"
 import { stringToMongoId } from "../utils/stringToMongoId"
 
 export async function userIsFollowed(followingUserId:string){

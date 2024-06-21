@@ -1,6 +1,6 @@
 
 "use server"
-import User from "@/lib/Models/UserModel"
+import User from "@/lib/Modals/UserModel"
 import { connectToDB } from "@/lib/mongoose"
 import { DbUser } from "@/lib/types/userTypes"
 import mongoose from "mongoose"

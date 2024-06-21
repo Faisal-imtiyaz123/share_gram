@@ -1,7 +1,7 @@
 "use server"
 
 import { connectToDB } from "@/lib/mongoose";
-import User from "@/lib/Models/UserModel";
+import User from "@/lib/Modals/UserModel";
 import { DbUser } from "../../types/userTypes";
 import { currentUser } from "@clerk/nextjs";
 

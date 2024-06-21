@@ -1,6 +1,6 @@
 "use server"
 
-import User from "@/lib/Models/UserModel"
+import User from "@/lib/Modals/UserModel"
 import { currentUser } from "@clerk/nextjs"
 interface userId{
     id:string;

@@ -1,7 +1,7 @@
 "use server"
 
-import Post from "@/lib/Models/PostModel"
-import User from "@/lib/Models/UserModel"
+import Post from "@/lib/Modals/PostModel"
+import User from "@/lib/Modals/UserModel"
 import { connectToDB } from "@/lib/mongoose"
 import { DbPost } from "@/lib/types/postTypes"
 

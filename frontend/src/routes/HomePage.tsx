@@ -10,7 +10,7 @@ export default function HomePage() {
   if(!posts) return null
   return (
     <div className="flex justify-center items-center h-full p-2 ">
-        <div className="flex flex-col gap-2 h-[100vh]  overflow-scroll ml-[10vw] mx-auto ">
+        <div className="flex flex-col gap-8 h-[100vh] overflow-y-scroll ml-[10vw] mx-auto ">
             {
                 posts.map((post,index)=>
                     <Post post={post} key={index}/>

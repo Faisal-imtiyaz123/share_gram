@@ -1,7 +1,7 @@
 "use server"
 
 
-import Thread from "@/lib/Models/ThreadModel"
+import Thread from "@/lib/Modals/ThreadModel"
 import { connectToDB } from "@/lib/mongoose"
 import { threadId } from "@/lib/types/threadTypes"
 

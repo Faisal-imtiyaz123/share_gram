@@ -1,7 +1,7 @@
 import { DbUser } from "@/lib/types/userTypes";
 import { fetchUser } from "../userActions/fetchUser";
-import User from "@/lib/Models/UserModel";
-import Thread from "@/lib/Models/ThreadModel";
+import User from "@/lib/Modals/UserModel";
+import Thread from "@/lib/Modals/ThreadModel";
 import { DbThread } from "@/lib/types/threadTypes";
 
 export async function fetchThreads(){

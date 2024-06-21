@@ -2,9 +2,9 @@
 
 import { connectToDB } from "@/lib/mongoose"
 import { fetchUserDbId } from "../userActions/fetchUserDbId"
-import User from "@/lib/Models/UserModel"
+import User from "@/lib/Modals/UserModel"
 import { pusher } from "@/lib/pusher"
-import Post from "@/lib/Models/PostModel"
+import Post from "@/lib/Modals/PostModel"
 import { createdPost } from "@/lib/types/postTypes"
 import { revalidatePath } from "next/cache"
 

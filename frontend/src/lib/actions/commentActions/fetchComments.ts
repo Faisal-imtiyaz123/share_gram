@@ -1,8 +1,8 @@
 "use server"
 
 
-import Comment from "@/lib/Models/CommentModel";
-import Thread from "@/lib/Models/ThreadModel";
+import Comment from "@/lib/Modals/CommentModel";
+import Thread from "@/lib/Modals/ThreadModel";
 import { threadId } from "@/lib/types/threadTypes";
 
 export async function fetchComments(threadId:threadId){

@@ -1,7 +1,7 @@
 "use server"
 
-import Comment from "@/lib/Models/CommentModel"
-import Thread from "@/lib/Models/ThreadModel"
+import Comment from "@/lib/Modals/CommentModel"
+import Thread from "@/lib/Modals/ThreadModel"
 import { connectToDB } from "@/lib/mongoose"
 import { revalidatePath } from "next/cache"
 

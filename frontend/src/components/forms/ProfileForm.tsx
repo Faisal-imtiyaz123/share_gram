@@ -61,7 +61,7 @@ export default function ProfileForm() {
    return (
     <Form {...form}>
     <form onSubmit={form.handleSubmit(onSubmit)} className="border-gray-400 border p-4 rounded-md space-y-3 w-[45rem] h-[40rem]">
-       <div>
+       <div className="flex justify-between items-center">
         <span> Choose Proifle Picture </span>
         <CloudinaryUploadWidget setUploadedImageUrl={setUploadedImgUrl}/>
        </div>
@@ -70,8 +70,6 @@ export default function ProfileForm() {
         name="name"
         render={({ field }) => (
           <FormItem>
-           
-
             <FormLabel>
               Name
              </FormLabel>

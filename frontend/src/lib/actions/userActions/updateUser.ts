@@ -2,7 +2,7 @@
 
 import { connectToDB } from "@/lib/mongoose"
 import { user } from "../../types/userTypes"
-import User from "@/lib/Models/UserModel"
+import User from "@/lib/Modals/UserModel"
 
 export async function updateUser(user:user):Promise<void>{
     connectToDB()

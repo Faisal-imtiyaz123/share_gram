@@ -1,6 +1,6 @@
 "use server"
 
-import Comment from "@/lib/Models/CommentModel"
+import Comment from "@/lib/Modals/CommentModel"
 import { connectToDB } from "@/lib/mongoose"
 import { stringToMongoId } from "../utils/stringToMongoId"
 

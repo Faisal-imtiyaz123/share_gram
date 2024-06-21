@@ -16,8 +16,7 @@ export default function MyProfilePage() {
   //   if (!user) return null;
   //   const following = await fetchFollowingUsers(user._id.toString());
   const { data: currentUser } = trpc.auth.currentUser.useQuery();
-  const [editProfile, setEditProfile] = useState<boolean>(false);
-
+  // const [editProfile, setEditProfile] = useState<boolean>(false);
   if (!currentUser) return null;
   const publicId = imgPublicId(currentUser?.user.profilePicture);
 

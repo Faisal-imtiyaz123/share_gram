@@ -1,27 +1,17 @@
-import mongoose from "mongoose"
+import { ObjectId } from "mongodb"
 
-export interface user{
-    id:string
-    username:string
+export interface User{
+    username: string
+    password: string,
+    appUsername: string,
     name:string
     bio:string
-    image:string
-    onboarded?:boolean
-    followers:mongoose.Schema.Types.ObjectId[],
-    following:mongoose.Schema.Types.ObjectId[],
-    requestedUsers:mongoose.Schema.Types.ObjectId[],
-    requestingUsers:mongoose.Schema.Types.ObjectId[],
-    blockedUsers:mongoose.Schema.Types.ObjectId[],
-    mutedAccounts:mongoose.Schema.Types.ObjectId[],
-    posts:{post:string[],_id:mongoose.Schema.Types.ObjectId,comments:string[]}[],
-    privateAccount:boolean
-
-
+    posts: ObjectId[] ,
+    followers:ObjectId[] 
+    following: ObjectId[],
+    onboarded:boolean,
+    privateAccount:boolean,
+    profilePicture:string,
+    messageUsers:ObjectId[] 
 }
-
-export interface DbUser extends user {
-    _id:string
-}
-
-export type authorId = mongoose.Schema.Types.ObjectId
-
+export type DbUser = User & {_id:ObjectId}

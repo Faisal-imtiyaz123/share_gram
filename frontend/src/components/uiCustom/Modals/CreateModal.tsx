@@ -16,9 +16,15 @@ const filesSchema = z.object({
 });
 
 export function CreateModal() {
+  const utils = trpc.useUtils()
   const mutation = trpc.posts.createPost.useMutation({
-    // onError: ()=>toast.error("Failed to create post"),
-    onSuccess:()=>toast.success("Post created successfully"),
+    onError: ()=>{
+      toast.error('error occured, try again')
+    },
+    onSuccess:()=>{
+      toast.success("Post created successfully")
+      utils.posts.fetchPosts.invalidate()
+    }
     
   })
   const [urls,setUrls ] = useState<string[]>([])
@@ -50,7 +56,7 @@ export function CreateModal() {
   }, [toggleModal]);
 
   
-  async function handleFiles(e:ChangeEvent<HTMLInputElement>){
+  async function handleFiles(e:any){
     const files:File[]= Array.from(e.target.files);
     setFiles(files)
     if(!files) return 
@@ -163,7 +169,7 @@ export function CreateModal() {
                         <FormControl>
                           <Input
                            ref={inputRef}
-                            onChange={(e)=>handleFiles(e,field.onChange)}
+                            onChange={(e)=>handleFiles(e)}
                             type="file"
                             accept="image/*, video/*"
                             placeholder="shadcn"

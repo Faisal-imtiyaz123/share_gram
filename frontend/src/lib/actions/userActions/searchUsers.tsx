@@ -1,8 +1,7 @@
 "use server"
 
-import User from "@/lib/Models/UserModel"
+import User from "@/lib/Modals/UserModel"
 import { connectToDB } from "@/lib/mongoose"
-import mongoose from "mongoose"
 import { revalidatePath } from "next/cache"
 
 export async function searchUsers(searchKey:string,userId:string){

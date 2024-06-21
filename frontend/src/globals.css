@@ -89,29 +89,24 @@
   }
 }
 
-@keyframes slideIn {
+@keyframes slideOut {
   from {
-    transform-origin:left ;
-    width: 15rem;
-   
+    transform: translateX(-20%);
   }
   to {
-    width: 0%;
-    transform-origin:left;
-   
+    transform: translateX(0);
   }
 }
 
-@keyframes slideOut {
+@keyframes slideIn {
   from {
-    display: hidden;
-    transform-origin:left ;
+    transform: translateX(0);
   }
   to {
-    transform-origin: left;
-    transform: scaleX(100%);
+    transform: translateX(-100%);
   }
 }
+
 
 .animate-slideIn {
   animation: slideIn 0.3s ease-out;

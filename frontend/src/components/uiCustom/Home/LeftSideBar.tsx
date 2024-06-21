@@ -30,8 +30,8 @@ export default function LeftSideBar() {
 
  }
   return (
-    <div className={`flex flex-col h-[100vh] border border-r pl-2 p-4 gap-2 w-[15rem] ${isAnySliderOpen?'w-[5rem]':''}`}>
-      <h1 className="text-[20px] pl-2 text-gray-600 mb-4">Threads</h1>
+    <div className={`flex z-10  flex-col h-[100vh] border border-r pl-2 p-4 gap-2 w-[15rem] ${isAnySliderOpen?'w-[5rem]':''}`}>
+      <h1 className="text-[20px] pl-2 text-gray-600 mb-4">𝒮𝒽𝒶𝓇ℯ𝒢𝓇𝒶𝓂</h1>
       <div className="flex flex-col gap-3 justify-center ">
       <> 
         <Link
@@ -44,12 +44,9 @@ export default function LeftSideBar() {
         <>
         <div  ref={context?.searchNavLinkRef} onClick={handleSearchClick}
           className={`flex gap-4 items-center p-3 hover:bg-gray-100 rounded-lg cursor-pointer ${isSearchSliderOpen?'pl-2':''}`} >
-         
             <div className={`${isSearchSliderOpen?'border border-gray-700 rounded-lg py-1 px-1':''}`}>
-
            <Search ref={context?.searchIconRef}/>
             </div>
-
           <div className={navLinkClassname}>Search</div>
         </div>
         </>
@@ -85,7 +82,10 @@ export default function LeftSideBar() {
           <div className={navLinkClassname}>Profile</div>
         </Link>
       </div>
+      <div className="ml-3 mt-4 gap-4 flex">
       <MoreDropDown/>
+      <span>More</span>
+      </div>
     </div>
   );
 }
