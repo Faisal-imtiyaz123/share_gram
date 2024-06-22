@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input"
 import { useForm} from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import {z} from "zod"
-import { Cloudinary } from '@cloudinary/url-gen';
 import { useState } from "react"
 import { trpc } from "@/lib/trpc"
 import toast from "react-hot-toast"
@@ -24,11 +23,10 @@ const FormSchema = z.object({
 
 
 export default function EditProfileModal() {
-  const [file, setFile] = useState<File>(null)
+  const [file, setFile] = useState<File|null>(null)
   const [url,setUrl] = useState<string>("")
   const utils = trpc.useUtils()
   const {data:currentUser}= trpc.auth.currentUser.useQuery()
-  const cld = new Cloudinary({cloud: {cloudName: 'dywebzylz'}});
   const mutation = trpc.user.createProfileDetails.useMutation({
     onError:()=>{
       toast.error(`Profile update failed `)
@@ -50,6 +48,7 @@ export default function EditProfileModal() {
   async function onSubmit(values:z.infer<typeof FormSchema>){
         toast.loading("Updating Profile")
         const formData = new FormData();
+        if(!file) return 
         formData.append('file', file)
         formData.append('upload_preset', 'xzsnd6c8'); // Replace with your upload preset
         formData.append('cloud_name', 'dywebzylz'); // Replace with your cloud name

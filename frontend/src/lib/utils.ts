@@ -15,3 +15,8 @@ export const imgPublicId = (img:string)=>{
   const parts = img.split('/')
   return parts[7].split('.')[0]
 }
+
+export const getAuthCookie=()=>{
+  const token = localStorage.getItem('auth')
+  return `Bearer ${token}`
+}

@@ -98,12 +98,12 @@ export function CreateModal() {
     // });
   }
 
-  async function onSubmit(values:z.infer<typeof filesSchema>){
+  // async function onSubmit(values:z.infer<typeof filesSchema>){
     
-    // await createPost({post:})
+  //   // await createPost({post:})
 
     
-  }
+  // }
   async function handlePost(){
   
     const uploadImages = files.map(image => {
@@ -157,7 +157,7 @@ export function CreateModal() {
 
           <div>
             <Form  {...form}>
-              <form  onSubmit={form.handleSubmit(onSubmit)}>
+              <form >
                 <FormField
                   control={form.control}
                   name="files"

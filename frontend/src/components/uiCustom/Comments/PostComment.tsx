@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function PostComment(props: Props) {
-  const { comment, username, commentId, authorId, profilePicture,postId, likes } =
+  const { comment, username, commentId, profilePicture,postId, likes } =
     props;
   const [liked, setLiked] = useState<boolean>(Boolean(likes)); 
   const [showModal,setShowModal] = useState<boolean>(false)

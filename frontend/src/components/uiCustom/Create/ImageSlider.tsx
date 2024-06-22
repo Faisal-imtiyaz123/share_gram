@@ -10,7 +10,7 @@ import 'swiper/css/pagination';
 import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules';
 
 export default function ImageSlider({previews}:{previews:string[]}) {
- const length = previews.length
+
   return (
     <div className={`${previews.length && 'grow'} rounded-lg flex `}>
        <Swiper

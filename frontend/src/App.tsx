@@ -2,7 +2,6 @@ import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from "@ta
 import { useState } from "react";
 import { trpc } from "./lib/trpc";
 import {  httpBatchLink } from "@trpc/client";
-import { getAuthCookie } from "./lib/actions/auth/auth.actions";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./routes/Index";
 import { LoginForm } from "./components/customAuth/LoginForm";
@@ -16,6 +15,7 @@ import MyProfilePage from "./routes/MyProfile";
 import HomePage from "./routes/HomePage";
 import { globalErrorHandler } from "./lib/globalErrorHandler";
 import ProfilePage from "./routes/ProfilePage";
+import { getAuthCookie } from "./lib/utils";
 
 // 
 
