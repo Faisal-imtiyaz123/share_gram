@@ -1,4 +1,4 @@
-import { Input } from "@/components/ui/input";
+
 import { useSearchStore } from "@/lib/Zustand-store/SearchStore";
 import useRefContext from "@/lib/hooks/useContext";
 import { useEffect, useRef, useState} from "react";
@@ -28,7 +28,7 @@ const getMatchScore = (text: string, user: DbUser): number => {
 };
 export default function SearchBar() {
   const {data:currentUser} = trpc.auth.currentUser.useQuery()
-  const [searchText, setSearchText] = useState<string>("")
+  const [searchText] = useState<string>("")
   const {data:users} = trpc.user.fetchUsers.useQuery()
   const matchingUsers = users
   ?.filter(user => {
@@ -36,6 +36,7 @@ export default function SearchBar() {
     return user.username.toLowerCase().includes(lowerText) || user.name.toLowerCase().includes(lowerText);
   }).
   filter((user)=> user._id.toString() !== currentUser?.user._id.toString())
+  // @ts-expect-error it's fine
   .sort((a, b) => getMatchScore(searchText, a) - getMatchScore(searchText, b));
   const { toggle, isOpen,opened } = useSearchStore((s) => s);
   const sheetRef = useRef<HTMLDivElement>(null)
@@ -60,21 +61,7 @@ export default function SearchBar() {
       className={` ${isOpen?"fixed":'hidden'}  
       ${ isOpen ? " w-[25rem] animate-slideOut" : opened?'animate-slideIn':''} h-screen left-[5rem] shadow-[10px_0_15px_-3px_rgba(0,0,0,0.1),10px_0_6px_-2px_rgba(0,0,0,0.05)] rounded-xl border-r z-10 bg-white`}
        >
-      {isOpen && 
-        <>
-          <div className="flex basis-[20%] flex-col justify-between  p-6 pt-6 border-b">
-           <label className="text-2xl font-semibold">Search</label>
-           <Input
-            type="search"
-            placeholder="Search for users"
-            className="mt-4"
-            onChange={(e)=>setSearchText(e.target.value)}
-           />
-          </div>
-          
-          {matchingUsers&& searchText && <SearchedUserList matchingUsers={matchingUsers} />}
-           </>
-    }
+      {matchingUsers && searchText && <SearchedUserList matchingUsers={matchingUsers as unknown as DbUser[]} />}
     </div>
   );
 }

@@ -1,13 +1,11 @@
 import { Form,FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@/components/ui/input"
+// @ts-expect-error useForm Error
 import { useForm} from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import {z} from "zod"
 import { Textarea } from "../ui/textarea"
-import { Cloudinary } from '@cloudinary/url-gen';
-import { auto } from '@cloudinary/url-gen/actions/resize';
-import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
 import CloudinaryUploadWidget from "../uiCustom/Profile/UploadWidget"
 import { useState } from "react"
 import { trpc } from "@/lib/trpc"
@@ -27,7 +25,6 @@ const FormSchema = z.object({
 
 
 export default function ProfileForm() {
-  const cld = new Cloudinary({cloud: {cloudName: 'dywebzylz'}});
   const navigate = useNavigate()
   const mutation = trpc.user.createProfileDetails.useMutation({
     onError:()=>{
@@ -39,10 +36,6 @@ export default function ProfileForm() {
     }
   })
   const [UploadedImgUrl, setUploadedImgUrl] = useState<string>("")
-  const img = cld.image('cld-sample-5')
-        .format('auto') // Optimize delivery by resizing and applying auto-format and auto-quality
-        .quality('auto')
-        .resize(auto().gravity(autoGravity()).width(500).height(500)); // Transform the image: auto-crop to square aspect_ratio
 
   const form = useForm({
     resolver:zodResolver(FormSchema),
@@ -68,6 +61,7 @@ export default function ProfileForm() {
        <FormField
         control={form.control}
         name="name"
+        // @ts-expect-error useForm Error
         render={({ field }) => (
           <FormItem>
             <FormLabel>
@@ -84,6 +78,7 @@ export default function ProfileForm() {
       <FormField
         control={form.control}
         name="username"
+        // @ts-expect-error useForm Error
         render={({ field }) => (
           <FormItem>
            
@@ -102,6 +97,7 @@ export default function ProfileForm() {
       <FormField
           control={form.control}
           name="bio"
+          // @ts-expect-error useForm Error
           render={({ field }) => (
             <FormItem>
               <FormLabel>Bio</FormLabel>

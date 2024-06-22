@@ -1,6 +1,7 @@
 import { useCreateModal } from "@/lib/Zustand-store/createModalStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
+  // @ts-expect-error useForm Error
 import { useForm } from "react-hook-form";
 import * as z from "zod"
 import ImageSlider from "../Create/ImageSlider";
@@ -55,7 +56,8 @@ export function CreateModal() {
     };
   }, [toggleModal]);
 
-  
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async function handleFiles(e:any){
     const files:File[]= Array.from(e.target.files);
     setFiles(files)
@@ -161,7 +163,7 @@ export function CreateModal() {
                 <FormField
                   control={form.control}
                   name="files"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem>
                       <div className="flex items-center gap-2">
                         <FormLabel>

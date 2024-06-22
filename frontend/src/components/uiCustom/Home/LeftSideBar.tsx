@@ -17,7 +17,7 @@ export default function LeftSideBar() {
   const context = useRefContext()
   const {toggle:notificationToggle} = useNotificationSliderStore()
   const {toggle:searchToggle} = useSearchStore(state=>state)
-  const {toggleModal,isModalOpen} = useCreateModal()
+  const {toggleModal} = useCreateModal()
   const currentUser = trpc.auth.currentUser.useQuery()
   const publicId = imgPublicId(currentUser.data?.user.profilePicture?currentUser.data?.user.profilePicture:"" )
 

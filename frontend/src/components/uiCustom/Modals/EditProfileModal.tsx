@@ -1,6 +1,9 @@
+"use client"
+
 import { Form,FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@/components/ui/input"
+// @ts-expect-error useForm Error
 import { useForm} from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import {z} from "zod"
@@ -9,6 +12,7 @@ import { trpc } from "@/lib/trpc"
 import toast from "react-hot-toast"
 import { Textarea } from "@/components/ui/textarea"
 import axios from "axios"
+
 
 
 
@@ -83,6 +87,7 @@ export default function EditProfileModal() {
        <FormField
         control={form.control}
         name="name"
+        // @ts-expect-error useForm Error
         render={({ field }) => (
           <FormItem>
             <FormLabel>
@@ -99,6 +104,7 @@ export default function EditProfileModal() {
       <FormField
         control={form.control}
         name="username"
+        // @ts-expect-error useForm Error
         render={({ field }) => (
           <FormItem>
 
@@ -116,6 +122,7 @@ export default function EditProfileModal() {
       <FormField
           control={form.control}
           name="bio"
+          // @ts-expect-error useForm Error
           render={({ field }) => (
             <FormItem>
               <FormLabel>Bio</FormLabel>

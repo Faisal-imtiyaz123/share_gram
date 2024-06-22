@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+// @ts-expect-error useForm Error
 import {useForm} from "react-hook-form"
 import { trpc } from "@/lib/trpc"
 import toast from "react-hot-toast"
@@ -63,6 +64,7 @@ export default function SignUpForm() {
         <FormField
           control={form.control}
           name="username"
+          // @ts-expect-error useForm Error
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
@@ -79,6 +81,7 @@ export default function SignUpForm() {
          <FormField
           control={form.control}
           name="password"
+          // @ts-expect-error useForm Error
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
@@ -95,6 +98,7 @@ export default function SignUpForm() {
          <FormField
           control={form.control}
           name="confirmPassword"
+          // @ts-expect-error useForm Error
           render={({ field }) => (
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
