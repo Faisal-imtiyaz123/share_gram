@@ -1,10 +1,10 @@
 import { connectToDatabase } from '../db';
 import * as z from "zod"
-import { comparePassword, generateAuthToken, generateUserTemplate, hashPassword, setAuthTokenCookie } from '../utils/authUtils';
+import { comparePassword, generateAuthToken, generateUserTemplate, hashPassword} from '../utils/authUtils';
 import { publicProcedure, router } from '../trpc';
 import {ObjectId} from "mongodb"
 import { TRPCError } from '@trpc/server';
-import { DbUser, User } from '../utils/types/userTypes';
+import { DbUser} from '../utils/types/userTypes';
 
 
 export const authRouter = router({

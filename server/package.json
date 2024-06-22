@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@trpc/server": "^11.0.0-rc.419",
     "@types/express": "^4.17.21",
     "@types/nodemon": "^1.19.6",
     "bcrypt": "^5.1.1",

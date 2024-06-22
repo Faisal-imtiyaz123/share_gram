@@ -4,9 +4,7 @@ import { publicProcedure, router } from '../trpc';
 import {ObjectId} from "mongodb"
 import { TRPCError } from '@trpc/server';
 import { Comment } from '../utils/types/commentTypes';
-import { createComment } from '../actions/commentActions/createComment';
 import { getTodaysDate } from '../utils/miscellaneous';
-import { deleteComment } from '../actions/commentActions/deleteComment';
 
 interface FetchPostComment{
         _id:  ObjectId,

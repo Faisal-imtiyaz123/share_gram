@@ -3,10 +3,8 @@ import * as z from "zod"
 import { publicProcedure, router } from '../trpc';
 import {ObjectId} from "mongodb"
 import { DbMessage, Message, getTime } from '../utils/messageUtils';
-import { EventEmitter } from 'events';
 import { pusher } from '../utils/pusher';
 
-const ee = new EventEmitter();
 
 
 

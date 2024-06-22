@@ -2,15 +2,12 @@ import { connectToDatabase } from '../db';
 import * as z from "zod"
 import { publicProcedure, router } from '../trpc';
 import {ObjectId} from "mongodb"
-import { EventEmitter } from 'events';
-import { pusher } from '../utils/pusher';
 import { getTime } from '../utils/messageUtils';
-import { dataTagSymbol } from '@tanstack/react-query';
 import { DbPost, Post } from '../utils/types/postTypes';
 import { TRPCError } from '@trpc/server';
 import { removeId } from '../utils/removeId';
 
-const ee = new EventEmitter();
+
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const now = new Date();
 const dayNum= now.getDay()
@@ -64,7 +61,6 @@ export const postRouter = router({
     })).mutation(async (opts)=>{
         const db = await connectToDatabase()
         const postCollection = await db.collection('posts')
-        const users = db.collection('users')
         const post = await postCollection.findOne({ _id: new ObjectId(opts.input.postId) })
         if (!post) {
             throw new TRPCError({

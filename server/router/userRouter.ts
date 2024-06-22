@@ -1,6 +1,6 @@
 import { connectToDatabase } from '../db';
 import * as z from "zod"
-import { comparePassword, generateAuthToken, generateUserTemplate, hashPassword, setAuthTokenCookie } from '../utils/authUtils';
+import {  generateUserTemplate} from '../utils/authUtils';
 import { publicProcedure, router } from '../trpc';
 import {ObjectId} from "mongodb"
 import { TRPCError } from '@trpc/server';
@@ -16,7 +16,7 @@ export const userRouter = router({
         profilePicture: z.string()
       }))
       .mutation(async (opts) => {
-        const { name, bio, username, profilePicture } = opts.input;
+        const { name, bio, username} = opts.input;
         const db = await connectToDatabase()
         const usersCollection = db.collection('users')
         const currentUser = await usersCollection.findOne({ _id: new ObjectId(opts.ctx.user?.data) })
