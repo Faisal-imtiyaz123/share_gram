@@ -1,9 +1,10 @@
-// src/mongoClient.ts
-// src/mongoClient.ts
-import { MongoClient } from 'mongodb';
 
-const uri = 'mongodb://localhost:27017'; // Replace with your MongoDB URI
+import { MongoClient } from 'mongodb';
+import * as dotenv from 'dotenv';
+dotenv.config();
+const uri = process.env.MOGO_URL!; // Replace with your MongoDB URI
 const client = new MongoClient(uri);
+
 
 let dbConnection: any;
 
