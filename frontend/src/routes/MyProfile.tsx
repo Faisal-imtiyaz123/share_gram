@@ -3,7 +3,6 @@ import Posts from "@/components/uiCustom/Profile/Posts";
 import { trpc } from "@/lib/trpc";
 import { imgPublicId } from "@/lib/utils";
 import { Bookmark, Grid3X3 } from "lucide-react";
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,

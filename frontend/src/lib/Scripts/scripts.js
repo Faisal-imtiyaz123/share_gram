@@ -1,1 +1,0 @@
-//update users --->>> db.users.updateMany({},{$set:{posts:[]}})

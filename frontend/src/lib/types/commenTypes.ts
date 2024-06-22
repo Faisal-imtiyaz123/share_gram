@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+
 
 export interface CommentType{
     comment: string
