@@ -13,7 +13,7 @@ export const userRouter = router({
         name: z.string().min(3, "Name is required"),
         bio: z.string().min(20, "Bio is required"),
         username: z.string().min(3, "Username is required"),
-        profilePicture: z.string().min(1, "Profile picture is required")
+        profilePicture: z.string()
       }))
       .mutation(async (opts) => {
         const { name, bio, username, profilePicture } = opts.input;
@@ -34,7 +34,7 @@ export const userRouter = router({
             name,
             bio,
             appUsername:username,
-            profilePicture,
+            profilePicture:opts.input.profilePicture?opts.input.profilePicture:currentUser.profilePicture,
         };
        
         // Update the user in the database

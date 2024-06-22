@@ -63,7 +63,8 @@ export default function EditProfileModal() {
         }).catch(error => {
           console.error('Error uploading the image:', error);
         });
-        const payload = {...values, profilePicture:url}
+        const payload = {...values, profilePicture:url||""}
+        console.log(payload)
         mutation.mutate(payload)
         toast.dismiss()
   }
@@ -78,7 +79,7 @@ export default function EditProfileModal() {
     <form onSubmit={form.handleSubmit(onSubmit)} className="">
        <div className="flex gap-2  items-center">
         <span className="basis-[50%]"> Choose Profile </span>
-        <Input required className="mr-2"  onChange={(e)=>handleFileUplaod(e)} type="file" />
+        <Input  className="mr-2"  onChange={(e)=>handleFileUplaod(e)} type="file" />
        </div>
        <FormField
         control={form.control}
