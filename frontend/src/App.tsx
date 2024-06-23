@@ -39,7 +39,7 @@ export default function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "https://share-gram.onrender.com/trpc",
+          url: "http://localhost:3000/trpc",
           // You can pass any HTTP headers you wish here
           headers:(opts) => {
             const {path} = opts.opList[0]
