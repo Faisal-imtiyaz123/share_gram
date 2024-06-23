@@ -7,11 +7,11 @@ import { Button } from "@/components/ui/button"
 import {z} from "zod"
 import { Textarea } from "../ui/textarea"
 import CloudinaryUploadWidget from "../uiCustom/Profile/UploadWidget"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { trpc } from "@/lib/trpc"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
-
+import  useCurrentUser from "@/lib/hooks/useCurrentUser"
 
 
 
@@ -25,18 +25,23 @@ const FormSchema = z.object({
 
 
 export default function ProfileForm() {
+  const currentUserQuery = useCurrentUser()
   const navigate = useNavigate()
   const mutation = trpc.user.createProfileDetails.useMutation({
     onError:()=>{
+      toast.dismiss(),
       toast.error("Profile creation failed")
     },
     onSuccess:()=>{
+      toast.dismiss(),
       toast.success("Profile created successfully"),
       navigate('/')
+    },
+    onMutate:()=>{
+      toast.loading("Creating Profile")
     }
   })
   const [UploadedImgUrl, setUploadedImgUrl] = useState<string>("")
-
   const form = useForm({
     resolver:zodResolver(FormSchema),
     defaultValues:{
@@ -46,12 +51,21 @@ export default function ProfileForm() {
 
     }
   })
+  useEffect(()=>{
+    if(currentUserQuery.data?.user.onboarded){
+      toast.success("Profile already created, redirecting to home")
+      navigate('/')
+    }
+
+  },[navigate, currentUserQuery.data])
   function onSubmit(values:z.infer<typeof FormSchema>){
     const payload = {...values, profilePicture:UploadedImgUrl}
     mutation.mutate(payload)
   }
    
    return (
+    <div className="fixed w-[100vw] h-[100vh] top-0 left-0 bg-black z-[1000] bg-opacity-50 flex justify-center items-center">
+    <div  className="bg-white rounded-lg shadow-lg">
     <Form {...form}>
     <form onSubmit={form.handleSubmit(onSubmit)} className="border-gray-400 border p-4 rounded-md space-y-3 w-[45rem] h-[40rem]">
        <div className="flex justify-between items-center">
@@ -122,6 +136,8 @@ export default function ProfileForm() {
       </div>
       
     </form>
-  </Form>
+    </Form>
+    </div>
+    </div>
   )
 }

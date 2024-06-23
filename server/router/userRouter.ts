@@ -35,8 +35,9 @@ export const userRouter = router({
             bio,
             appUsername:username,
             profilePicture:opts.input.profilePicture?opts.input.profilePicture:currentUser.profilePicture,
+            onboarded:true,
         };
-       
+
         // Update the user in the database
         const result = await usersCollection.updateOne(
             { _id: new ObjectId(opts.ctx.user?.data) },

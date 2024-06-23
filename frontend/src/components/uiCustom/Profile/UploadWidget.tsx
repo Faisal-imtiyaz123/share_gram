@@ -9,10 +9,10 @@ const CloudinaryUploadWidget = ({setUploadedImageUrl}:{setUploadedImageUrl:Dispa
         document.body.appendChild(script);
 
         script.onload = () => {
-            // @ts-ignore
+            // @ts-expect-error ignore
             const myWidget = window.cloudinary.createUploadWidget({
-                cloudName: process.env.VITE_CLOUD_NAME, // Replace with your Cloudinary cloud name
-                uploadPreset: process.env.VITE_UPLAOD_PRESET, // Replace with your Cloudinary upload preset
+                cloudName:"dywebzylz", // Replace with your Cloudinary cloud name
+                uploadPreset:"xzsnd6c8", // Replace with your Cloudinary upload preset
                 showUploadMoreButton: true,
                 singleUploadAutoClose: false
             }, (error: any, result: any) => {

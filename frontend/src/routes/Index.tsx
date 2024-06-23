@@ -6,12 +6,15 @@ import { RefProvider } from "@/lib/hooks/useContext";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { CreateModal } from "@/components/uiCustom/Modals/CreateModal";
+import useCurrentUser from "@/lib/hooks/useCurrentUser";
 
 export default function Home() {
+  const {data:currentUser} = useCurrentUser()
   const navigate = useNavigate()
   useEffect(()=>{
     if(!localStorage.getItem('auth')) return navigate('/login')
-  },[navigate])
+    if(currentUser?.user.onboarded === false) navigate('/profile')
+  },[navigate,currentUser?.user.onboarded])
 
   return (
     <>
