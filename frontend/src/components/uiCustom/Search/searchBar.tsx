@@ -36,7 +36,7 @@ export default function SearchBar() {
     return user.username.toLowerCase().includes(lowerText) || user.name.toLowerCase().includes(lowerText);
   }).
   filter((user)=> user._id.toString() !== currentUser?.user._id.toString())
-  // @ts-expect-error it's fine
+  // @ts-expect-error it's
   .sort((a, b) => getMatchScore(searchText, a) - getMatchScore(searchText, b));
   const { toggle, isOpen,opened } = useSearchStore((s) => s);
   const sheetRef = useRef<HTMLDivElement>(null)

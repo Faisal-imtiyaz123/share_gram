@@ -16,6 +16,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { trpc } from "@/lib/trpc"
 import { useNavigate } from "react-router-dom"
+import toast from "react-hot-toast"
+import { MoveRight } from "lucide-react"
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -31,13 +33,18 @@ export function LoginForm() {
   const mutatation = trpc.auth.login.useMutation(
     {
       onSuccess:(data)=>{
+        toast.dismiss()
       localStorage.setItem('auth',data.token)
       navigate('/')
       }
     ,
-    // onError:(err)=>{
-    //   toast.error(err.message)
-    // }
+    onMutate:()=>{
+      toast.loading("Logging in...")
+    },
+    onError:(err)=>{
+      toast.dismiss()
+      toast.error(err.message)
+    }
   }
   )
   
@@ -88,9 +95,9 @@ export function LoginForm() {
             <FormControl>
               <Input placeholder="Enter your password" {...field} />
             </FormControl>
-            {/* <FormDescription>
-              This is your public display name.
-            </FormDescription> */}
+            <FormDescription className="flex gap-1 items-center text-red-600">
+              New here? Sign up <MoveRight onClick={()=>navigate('/signup')} className="cursor-pointer "/>
+            </FormDescription>
             <FormMessage />
           </FormItem>
         )}

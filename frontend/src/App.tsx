@@ -17,7 +17,7 @@ import { globalErrorHandler } from "./lib/globalErrorHandler";
 import ProfilePage from "./routes/ProfilePage";
 import { getAuthCookie } from "./lib/utils";
 
-// 
+
 
 
 
@@ -39,7 +39,7 @@ export default function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "http://localhost:3000/trpc",
+          url: "https://share-gram.onrender.com/trpc",
           // You can pass any HTTP headers you wish here
           headers:(opts) => {
             const {path} = opts.opList[0]
@@ -76,7 +76,7 @@ export default function App() {
               <Route path="/home/profile/:userId" element={<ProfilePage/>}/>
             </Route>
             <Route path="/login" element={<LoginForm />} />
-            <Route path="/signup" element={<SignUpForm />} />
+            <Route  path="/signup" element={<SignUpForm />} />
             {/* <Route path="/signout" element={<SignOut/>} /> */}
           </Routes>
         </BrowserRouter>

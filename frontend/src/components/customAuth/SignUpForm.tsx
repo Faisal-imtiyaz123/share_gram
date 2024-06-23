@@ -15,6 +15,8 @@ import { Input } from "@/components/ui/input"
 import {useForm} from "react-hook-form"
 import { trpc } from "@/lib/trpc"
 import toast from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
+
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -34,12 +36,20 @@ const formSchema = z.object({
 
 export default function SignUpForm() {
   // const [errors,setErrors]=useState<{path:string,error:string}[]>([])
+  const navigate = useNavigate()
   const mutatation = trpc.auth.signUp.useMutation({
+    onMutate:()=>{
+      toast.loading("Signing up...")
+    },
     onError:(error)=>{
+      toast.dismiss()
       toast.error(`Sign up failed: ${error.message}`)
     },
     onSuccess:()=>{
-      toast.success("Sign up successful")
+      toast.dismiss()
+      toast.success("Sign up successful, redirecting to login...")
+      navigate("/login")
+       
     }
   })
   const form = useForm<z.infer<typeof formSchema>>({

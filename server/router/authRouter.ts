@@ -70,7 +70,9 @@ export const authRouter = router({
 
     return { message: 'Signup successful' };
       }),
-    currentUser:publicProcedure.
+    currentUser:publicProcedure.output((user)=>{
+       return user as {user:DbUser}
+    }).
     query(async (opts)=>{
         const db = await connectToDatabase()
         if(!opts.ctx.user) throw new TRPCError({code:"UNAUTHORIZED",message:"User not authenticated"})
