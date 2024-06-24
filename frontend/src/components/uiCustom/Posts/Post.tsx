@@ -1,18 +1,17 @@
 import { DbPost } from "@/lib/types/postTypes";
 import { CloudinaryImage } from "../Profile/CloudinaryImage";
 import { trpc } from "@/lib/trpc";
-import { Ellipsis, Heart, MessageCircle, Share } from "lucide-react";
+import {  Heart, MessageCircle, Share } from "lucide-react";
 import { useState } from "react";
 import PostAndCommentsModal from "../Modals/PostAndCommentsModal";
 import PostImage from "./PostImage";
 import useHandleClickOutside, { ClickOutsideRef } from "@/lib/hooks/useHanldeClickOutside";
-import { imgPublicId } from "@/lib/utils";
-import PostOptionsModal from "./PostOptionsModal";
+import { imgPublicId } from "@/lib/utils"
 
 export default function Post({post}:{post:DbPost}) {
   const utils = trpc.useUtils()
   const [showModal, setShowModal] = useState<boolean>(false)
-  const [showOptionsModal,setShowOptionsModal] = useState<boolean>(false)
+ 
   const modalRef:ClickOutsideRef<HTMLDivElement> = useHandleClickOutside({setShowModal,showModal})
   // const optionsRef:ClickOutsideRef<HTMLDivElement> = useHandleClickOutside({setShowModal:setShowOptionsModal,showModal:showOptionsModal})
   const {data:user} = trpc.user.fetchUser.useQuery({userId:post.authorId.toString()})
@@ -37,11 +36,7 @@ export default function Post({post}:{post:DbPost}) {
       <CloudinaryImage height={32} width={32} publicId={publicId} />
       <span>{user.appUsername}</span>
       </div>
-      <span>
-        <Ellipsis onClick={()=>setShowOptionsModal(!showOptionsModal)}  color="#8a8a8a"/>
-        {showOptionsModal &&  <PostOptionsModal postId={post._id.toString()} showModal={showOptionsModal} setShowModal={setShowOptionsModal} />}
-        
-      </span>
+      
     </div>
     <PostImage post={post} />
     <div className="flex gap-4 mt-2">
@@ -58,7 +53,7 @@ export default function Post({post}:{post:DbPost}) {
       {showModal && <PostAndCommentsModal modalRef={modalRef} post={post} />}
       <div className="flex flex-col items-center">
       <MessageCircle onClick={() => setShowModal((showModal) => !showModal)} />
-      <span className="mr-1">{post.comments.length}</span>
+      <span className="mr-1 text-sm">{post.comments.length}</span>
       </div>
       <Share />
     </div>

@@ -1,26 +1,51 @@
 // import EditProfileModal from "@/components/uiCustom/Modals/EditProfileModal"
 import { CloudinaryImage } from "@/components/uiCustom/Profile/CloudinaryImage"
 import Posts from "@/components/uiCustom/Profile/Posts"
+import useCurrentUser from "@/lib/hooks/useCurrentUser"
 import { trpc } from "@/lib/trpc"
 import { imgPublicId } from "@/lib/utils"
 // import { Dialog, DialogContent, DialogTrigger } from "@radix-ui/react-dialog"
 import { Bookmark, Grid3X3 } from "lucide-react"
+import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 
 export default function ProfilePage() {
+  const {data:currentUser}  = useCurrentUser()
+  const navigate = useNavigate()
   const params = useParams()
+  const utils = trpc.useUtils()
   const userId = params.userId?.toString()
-  if(!userId) return null
-  const {data:user,isLoading} = trpc.user.fetchUser.useQuery({userId})
-  if(isLoading) return toast.loading('Getting user profile')
+  const mutation = trpc.user.followUser.useMutation({
+    onSuccess:()=>{
+      utils.user.fetchUser.invalidate()
+    }
+  })
+  const {data:user,isError,isLoading} = trpc.user.fetchUser.useQuery({userId:userId!})
+  const [followed, setFollowed] = useState<boolean|undefined>(user?.followers.includes(currentUser!.user._id))
+  
+  useEffect(()=>{
+    if(isError) {
+      toast.error(`user not found`)
+      navigate('/login')
+    } 
+  },[navigate,isError])
+
+if(isLoading) return toast.loading('Getting user profile')
 if(user){
  toast.dismiss()
  const publicId = imgPublicId(user?.profilePicture)
 
+ const handleFollow = ()=>{
+    setFollowed(!followed)
+    mutation.mutate({userId:userId!,followed:!followed})
+ }
 
+const handleMessage = ()=>{
+  navigate(`/message/${user._id.toString()}`)
 
+}
 return (
 
   <div className="flex flex-col h-full w-full items-center">
@@ -32,14 +57,8 @@ return (
       <div className="mt-6 flex gap-4">
         <span className="text-xl">{}</span>
         <div className="flex gap-2">
-          {/* <button className="p-1 px-4 bg-gray-100 rounded-lg">
-            <Dialog>
-              <DialogTrigger>Edit Profile</DialogTrigger>
-              <DialogContent >
-               <EditProfileModal/>
-              </DialogContent>
-            </Dialog>
-          </button> */}
+          <button onClick={handleFollow} className={`p-1 px-4 rounded-lg ${followed?"bg-blue-400 text-white":"bg-gray-100"}`}>{followed?"Unfollow":"Follow"}</button>
+          <button onClick={handleMessage} className="p-1 px-4 bg-gray-100 rounded-lg">Message</button>
           <button className="p-1 px-4 bg-gray-100 rounded-lg">
             View Archive
           </button>
@@ -67,7 +86,7 @@ return (
       </span>
     </div>
     <div className="h-full w-[85%] ">
-      <Posts />
+      <Posts userId={user._id.toString()} />
     </div>
   </div>
 </div>

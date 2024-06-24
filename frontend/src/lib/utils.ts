@@ -20,3 +20,15 @@ export const getAuthCookie=()=>{
   const token = localStorage.getItem('auth')
   return `Bearer ${token}`
 }
+
+export default async function ensure(fn:any){
+  try{
+    if(typeof fn == 'function'){
+      return fn()
+    }
+  }catch(e){
+    if(typeof fn !== 'function') throw new Error('Pass only a function to ensure decorator')
+    toas
+
+}
+}

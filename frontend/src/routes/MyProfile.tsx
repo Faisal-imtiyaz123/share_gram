@@ -1,6 +1,5 @@
 import { CloudinaryImage } from "@/components/uiCustom/Profile/CloudinaryImage";
 import Posts from "@/components/uiCustom/Profile/Posts";
-import { trpc } from "@/lib/trpc";
 import { imgPublicId } from "@/lib/utils";
 import { Bookmark, Grid3X3 } from "lucide-react";
 import {
@@ -9,13 +8,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import EditProfileModal from "@/components/uiCustom/Modals/EditProfileModal";
+import useCurrentUser from "@/lib/hooks/useCurrentUser";
 
 export default function MyProfilePage() {
-  //   const user = await fetchUser<DbUser>();
-  //   if (!user) return null;
-  //   const following = await fetchFollowingUsers(user._id.toString());
-  const { data: currentUser } = trpc.auth.currentUser.useQuery();
-  // const [editProfile, setEditProfile] = useState<boolean>(false);
+  const { data: currentUser } = useCurrentUser();
   if (!currentUser) return null;
   const publicId = imgPublicId(currentUser?.user.profilePicture);
 
@@ -63,7 +59,7 @@ export default function MyProfilePage() {
             <Bookmark height={15} width={15} /> Saved
           </span>
         </div>
-        <div className="h-full w-[85%] ">
+        <div className="h-full mt-4 w-[85%] overflow-scroll">
           <Posts />
         </div>
       </div>

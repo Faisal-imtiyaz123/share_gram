@@ -18,24 +18,6 @@ export default function DeleteCommentModal(props:Props) {
     })
     const {setShowModal,showModal,commentId,postId} = props
     const modalRef:ClickOutsideRef<HTMLDivElement> = useHandleClickOutside({setShowModal,showModal})
-    // const modalRef = useRef<HTMLDivElement>(null)
-    // useEffect(() => {
-    //     const handleClickOutside = (e:MouseEvent)=>{
-    //         if(modalRef.current && !modalRef.current.contains(e.target as Node)){
-    //           setShowModal(false)
-    //         }
-        
-    //       }
-    //     if (showModal) {
-    //       document.addEventListener('mousedown', handleClickOutside);
-    //     } else {
-    //       document.removeEventListener('mousedown', handleClickOutside);
-    //     }
-    
-    //     return () => {
-    //       document.removeEventListener('mousedown', handleClickOutside);
-    //     };
-    //   }, [setShowModal,showModal]);
 
     const handleDeleteComment=()=>{
         mutation.mutate({
