@@ -6,11 +6,13 @@ import { useEffect, useRef, useState } from "react"
   // @ts-expect-error useForm Error
 import { useForm } from "react-hook-form"
 import { z} from "zod"
-import { SendHorizonal } from "lucide-react"
+import { Info, SendHorizonal } from "lucide-react"
 import { Message } from "@/lib/types/messageTypes"
 import MessageItem from "./MessageItem"
 import { trpc } from "@/lib/trpc"
 import { ObjectId } from "mongodb"
+import { useParams } from "react-router-dom"
+import MessageInfoModal from "./MessagInfoModal"
 
 const messageSchema= z.object({
     message:z.string()
@@ -20,6 +22,9 @@ export default function ChattingPage({recieverId,senderId,messagesArr}:{reciever
   const [messages,setMessages] = useState<Message[]>(messagesArr)
   const mutation = trpc.message.sendMessage.useMutation()
   const messagesDivRef = useRef<HTMLDivElement>(null)
+  const params = useParams()
+  const {data:user} = trpc.user.fetchUser.useQuery({userId:params.id!},{enabled:!!params.id})
+  const [showModal,setShowModal] = useState<boolean>(false)
   
   const scrollToBottom = () => {
     if (messagesDivRef.current) {
@@ -32,7 +37,6 @@ export default function ChattingPage({recieverId,senderId,messagesArr}:{reciever
         message:""
     }
   })
-
   useEffect(()=>{
     pusherClient.subscribe(recieverId)
     pusherClient.subscribe('messages')
@@ -53,6 +57,7 @@ export default function ChattingPage({recieverId,senderId,messagesArr}:{reciever
 
   async function onSubmit(values:z.infer<typeof messageSchema>){
     mutation.mutate({recieverId:recieverId, senderId:senderId, message:values.message})
+    form.setValue('message','')
     
 
   }
@@ -60,9 +65,19 @@ export default function ChattingPage({recieverId,senderId,messagesArr}:{reciever
   
   return (
       <div  className="flex w-full h-[100vh] flex-col gap-2 p-1">
+        <div className="border-b-2 p-3 flex justify-between items-center">
+          <div className="flex gap-4 items-center">
+           <img className="rounded-full h-[4rem] w-[4rem]" alt="profilePicture" src={user?.profilePicture} />
+           <span className="text-lg">{user?.appUsername}</span>
+          </div>
+          <div>
+           <Info onClick={()=>setShowModal(!showModal)} size={40}/>
+           {showModal && <MessageInfoModal userId={user!._id.toString()} showModal={showModal} setShowModal={setShowModal}/>}
+          </div>
+        </div>
       <div ref={messagesDivRef} style={{overflowY:"auto"}} className="flex mb-4 mt-2 flex-col gap-2 basis-[90%]" >
         <>
-       {messages.map((message,index)=><MessageItem key={index} messageObj={message}/>)}
+       {messages.map((message,index)=><MessageItem index={index} key={index} messageObj={message}/>)}
         </>
       </div>
     <div  >
@@ -75,7 +90,7 @@ export default function ChattingPage({recieverId,senderId,messagesArr}:{reciever
           render={({ field }) => (
             <FormItem className="flex items-center gap-4">
               <FormControl className="w-[40rem]">
-                <Input className=" border-gray-300  w-[52rem] mb-2 rounded-xl" placeholder="" {...field} />
+                <Input className=" border-black  w-[52rem] mb-2 rounded-xl" placeholder="write a message..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
