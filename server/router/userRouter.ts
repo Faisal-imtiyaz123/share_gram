@@ -78,6 +78,54 @@ export const userRouter = router({
         const usersCollection = db.collection('users')
         const users = await usersCollection.find().toArray()
         return users
+    }),
+    followUser:publicProcedure.input(z.object({
+        userId:z.string().min(1,{message:"UserId is required" }),
+        followed: z.boolean()
+    })).mutation(async (opts)=>{
+        const db = await connectToDatabase()
+        const usersCollection = db.collection('users')
+        const user = await usersCollection.findOne({ _id: new ObjectId(opts.input.userId) })
+        if (!user) {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: "User not found"
+            });
+          }
+        
+          const currentUser = await usersCollection.findOne({ _id: new ObjectId(opts.ctx.user?.data) });
+        
+          if (!currentUser) {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: "User not found, login again"
+            });
+          }
+          if (opts.input.followed) {
+            // Add current user to the followers of the target user
+            await usersCollection.updateOne(
+              { _id: new ObjectId(opts.input.userId) },
+              { $addToSet: { followers: currentUser._id } }
+            );
+        
+            // Add target user to the following list of the current user
+            await usersCollection.updateOne(
+              { _id: currentUser._id },
+              { $addToSet: { following: user._id } }
+            );
+          } else {
+            // Remove current user from the followers of the target user
+            await usersCollection.updateOne(
+              { _id: new ObjectId(opts.input.userId) },
+              { $pull: { followers: currentUser._id } }
+            );
+        
+            // Remove target user from the following list of the current user
+            await usersCollection.updateOne(
+              { _id: currentUser._id },
+              { $pull: { following: user._id } }
+            );
+          }
     })
 
 })
