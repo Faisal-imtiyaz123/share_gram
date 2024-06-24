@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { EllipsisVertical } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 
-export default function MessageItem({messageObj}:{messageObj:Message}) {
+export default function MessageItem({messageObj,index}:{messageObj:Message,index:number}) {
   const [showOptions,setShowOptions] = useState<boolean>(false)
   const [ellipsisClicked,setEllipsisClicked] = useState<boolean>(false)
   const [clicked, setClicked] = useState<boolean>(false)
@@ -48,7 +48,7 @@ export default function MessageItem({messageObj}:{messageObj:Message}) {
       <div className="flex relative items-center ">
       { (showOptions  || ellipsisClicked && clicked) && <EllipsisVertical size={16}  onClick={()=>setEllipsisClicked(!ellipsisClicked)}/> }
        <div>
-       {(ellipsisClicked && clicked) && <div style={{right:`${dimensions.width+16}px`,top:`-${dimensions.height+4}px`}} onClick={handleDeleteMessage} className="absolute cursor-pointer hover:bg-gray-50 z-10 bg-white p-4 text-red-600  rounded-lg shadow-lg">Delete</div>}
+       {(ellipsisClicked && clicked) && <div style={{right:`${dimensions.width+16}px`,top:`-${index&&dimensions.height+4}px`}} onClick={handleDeleteMessage} className="absolute cursor-pointer hover:bg-gray-50  bg-white p-4 text-red-600 rounded-lg shadow-lg">Delete</div>}
        </div>
        <span ref={elementRef}  className={` p-2 px-4 rounded-2xl bg-blue-400 text-white `}>
       {messageObj.message}
