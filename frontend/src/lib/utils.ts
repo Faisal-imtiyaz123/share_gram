@@ -21,14 +21,14 @@ export const getAuthCookie=()=>{
   return `Bearer ${token}`
 }
 
-export default async function ensure(fn:any){
-  try{
-    if(typeof fn == 'function'){
-      return fn()
-    }
-  }catch(e){
-    if(typeof fn !== 'function') throw new Error('Pass only a function to ensure decorator')
-    toas
+// export default async function ensure(fn:any){
+//   try{
+//     if(typeof fn == 'function'){
+//       return fn()
+//     }
+//   }catch(e){
+//     if(typeof fn !== 'function') throw new Error('Pass only a function to ensure decorator')
+  
 
-}
-}
+// }
+// }
