@@ -7,7 +7,7 @@ export interface messageUsers {
 }
 
 export interface messageUsersDetails{
-    _id :ObjectId
+    _id :string
     username :string
     profilePhoto :string
     name :string
