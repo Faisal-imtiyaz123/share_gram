@@ -10,3 +10,16 @@ export interface Message{
         year:string
     }
 }
+
+export interface messageUsers {
+    _id :ObjectId
+    messageUsersDetails :messageUserDetails[]
+
+}
+
+export interface messageUserDetails{
+    _id :ObjectId
+    username :string
+    profilePhoto :string
+    name :string
+}
