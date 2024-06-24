@@ -9,8 +9,7 @@ export default function MessageUser({user}:{user:messageUsersDetails}) {
     <div className="">
         <Link className="flex h-[4rem] hover:bg-gray-100 p-2 gap-4" to={`/message/${user._id.toString()}`}>
          <div className="rounded-full w-[3rem] h-[3rem] relative border border-gray-300 ">
-
-        <CloudinaryImage publicId={publicId}/> 
+        <CloudinaryImage className="rounded-full h-full w-full object-contain" publicId={publicId}/> 
          </div>
          <div className="flex flex-col ">
 
