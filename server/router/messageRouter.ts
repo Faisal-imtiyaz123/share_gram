@@ -4,6 +4,7 @@ import { publicProcedure, router } from '../trpc';
 import {ObjectId} from "mongodb"
 import { DbMessage, Message, getTime } from '../utils/messageUtils';
 import { pusher } from '../utils/pusher';
+import { messageUsers } from '../utils/types/messageTypes';
 
 
 
@@ -54,7 +55,9 @@ export const messageRouter = router({
       );
 
       }),
-      fetchMessageUsers:publicProcedure.
+      fetchMessageUsers:publicProcedure.output((out)=>{
+        return out as messageUsers[]
+      }).
       query(async (opts)=>{
         const db = await connectToDatabase()
         const senderDbId = new ObjectId(opts.ctx.user?.data)
@@ -119,6 +122,26 @@ export const messageRouter = router({
         await pusher.trigger('messages','delete-message',{
           messageId : messageId
       })
+      }),
+      deleteChat: publicProcedure.input(z.object({
+        userId:z.string().min(1,{message:"User ID is required"}),
+      })).mutation(async(opts)=>{
+        const db = await connectToDatabase()
+        const usersCollection = db.collection('users')
+        const currentUserId = new ObjectId(opts.ctx.user?.data)
+        const userId = new ObjectId(opts.input.userId)
+        await usersCollection.updateOne(
+          { _id: currentUserId },
+          { $pull: { messageUsers: userId } }
+      );
+      // const messagesCollection = db.collection('messages'); 
+      // await messagesCollection.deleteMany({
+      //   $or: [
+      //     { senderId: currentUserId, receiverId: userId },
+      //     { senderId: userId, receiverId: currentUserId },
+      //   ],
+      // });
+
       })
     
 })
