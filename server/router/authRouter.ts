@@ -25,24 +25,17 @@ export const authRouter = router({
       }
       const passwordMatch = await comparePassword(password, user.password);
       if (!passwordMatch) {
-        return {
-            message:"Invalid username or password",
-            token:""
-        }
+        throw new TRPCError({
+          code:"UNAUTHORIZED",
+          message:"Invalid username or password"
+        })
       }
       const token = generateAuthToken(user._id)
       // setAuthTokenCookie(opts.ctx.res, token);
-      if(user){
-        return {
-            message:"success",
-            token
-        }
-      }else{
-        throw new TRPCError({
-            code:"INTERNAL_SERVER_ERROR",
-            message:"An error occured"
-        })
-      }
+      return {
+        message: 'Login successful',
+        token
+      };
     
     }),
     signUp:publicProcedure.input(z.object({
