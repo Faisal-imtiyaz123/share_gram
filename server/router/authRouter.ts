@@ -38,10 +38,10 @@ export const authRouter = router({
             token
         }
       }else{
-        return {
-            message:"Invalid username or password",
-            token:""
-        }
+        throw new TRPCError({
+            code:"INTERNAL_SERVER_ERROR",
+            message:"An error occured"
+        })
       }
     
     }),

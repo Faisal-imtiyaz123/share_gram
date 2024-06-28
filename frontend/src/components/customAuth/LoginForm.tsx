@@ -94,7 +94,7 @@ export function LoginForm() {
           <FormItem>
             <FormLabel>Password</FormLabel>
             <FormControl>
-              <Input placeholder="Enter your password" {...field} />
+              <Input type="password" placeholder="Enter your password" {...field} />
             </FormControl>
             {/* <FormDescription className="flex gap-1 items-center text-red-600">
               New here? Sign up <MoveRight onClick={()=>navigate('/signup')} className="cursor-pointer "/>
