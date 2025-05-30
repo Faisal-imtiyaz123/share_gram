@@ -18,19 +18,30 @@ import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 
 function getPasswordStrength(password: string) {
+  const hasMinLength = password.length >= 8;
+  const hasLowercase = /[a-z]/.test(password);
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasNumber = /\d/.test(password);
+  const hasSpecialChar = /[\$!%*?&@.]/.test(password); // updated to include '.'
+
+  if (hasMinLength && hasLowercase && hasUppercase && hasNumber && hasSpecialChar) {
+    return 5;
+  }
+
   let strength = 0;
-  if (password.length > 5) strength += 1;
-  if (password.match(/(?=.*[0-9])/)) strength += 1;
-  if (password.match(/(?=.*[A-Z])/)) strength += 1;
-  if (password.match(/(?=.*[a-z])/)) strength += 1;
-  if (password.match(/(?=.*[!@#$%^&*])/)) strength += 1;
+  if (hasMinLength) strength += 1;
+  if (hasLowercase) strength += 1;
+  if (hasUppercase) strength += 1;
+  if (hasNumber) strength += 1;
+  if (hasSpecialChar) strength += 1;
+
   return strength;
 }
 
 function PasswordStrengthIndicator({ password }: { password: string }) {
   const strength = getPasswordStrength(password);
   const color = strength < 2 ? 'bg-red-500' : strength < 4 ? 'bg-yellow-500' : 'bg-green-500';
-  const width = `${strength * 20}%`;
+  const width = `${(strength / 5) * 100}%`;
 
   return (
     <div className="w-full bg-gray-300 rounded">
@@ -43,10 +54,16 @@ const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
-  password: z.string().min(8).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\$!%*?&@])[A-Za-z\d@$!%*?&]{8,}$/, {
-    message: "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.",
+  password: z.string().min(8).regex(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\$!%*?&@.])[A-Za-z\d@$!%*?&.]{8,}$/,
+    {
+      message:
+        "Password must be at least 8 characters, include uppercase, lowercase, a number, and one of $!%*?&@.",
+    }
+  ),
+  confirmPassword: z.string().min(8, {
+    message: "Confirm password must be at least 8 characters",
   }),
-  confirmPassword: z.string().min(8, { message: "Confirm password must be at least 8 characters" })
 });
 
 export default function SignUpForm() {
@@ -63,7 +80,7 @@ export default function SignUpForm() {
       toast.dismiss();
       toast.success("Sign up successful, redirecting to login...");
       navigate("/login");
-    }
+    },
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -71,19 +88,23 @@ export default function SignUpForm() {
     defaultValues: {
       username: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (values.confirmPassword !== values.password) return toast.error("Passwords don't match");
+    if (values.confirmPassword !== values.password)
+      return toast.error("Passwords don't match");
     mutation.mutate(values);
   }
 
   return (
     <div className="flex justify-center h-screen">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-[40vw] mt-[5rem] shadow-lg max-h-[27rem] p-4 border-2 rounded-lg space-y-6">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-[40vw] mt-[5rem] shadow-lg max-h-[27rem] p-4 border-2 rounded-lg space-y-6"
+        >
           <FormField
             control={form.control}
             name="username"
@@ -105,22 +126,22 @@ export default function SignUpForm() {
             control={form.control}
             name="password"
             // @ts-expect-error useForm Error
-            render={({ field }) => {
-              // Log the password value for debugging
-              console.log("Password:", field.value);
-              return (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <div className="flex flex-col gap-4">
-                      <Input type="password" placeholder="Enter your password" {...field} />
-                      <PasswordStrengthIndicator password={field.value} />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <div className="flex flex-col gap-4">
+                    <Input
+                      type="password"
+                      placeholder="Enter your password"
+                      {...field}
+                    />
+                    <PasswordStrengthIndicator password={field.value} />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
           <FormField
             control={form.control}
@@ -130,9 +151,13 @@ export default function SignUpForm() {
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Confirm your password" {...field} />
+                  <Input
+                    type="password"
+                    placeholder="Confirm your password"
+                    {...field}
+                  />
                 </FormControl>
-                <FormMessage>{form.formState.errors.confirmPassword?.message}</FormMessage>
+                <FormMessage />
               </FormItem>
             )}
           />
