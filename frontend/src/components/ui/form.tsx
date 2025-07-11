@@ -3,17 +3,11 @@ import * as LabelPrimitive from "@radix-ui/react-label"
 import { Slot } from "@radix-ui/react-slot"
 
 import {
-  // @ts-expect-error useForm Error
   Controller,
-  // @ts-expect-error useForm Error
   ControllerProps,
-  // @ts-expect-error useForm Error
   FieldPath,
-  // @ts-expect-error useForm Error
   FieldValues,
-  // @ts-expect-error useForm Error
   FormProvider,
-  // @ts-expect-error useForm Error
   useFormContext,
 } from "react-hook-form"
 

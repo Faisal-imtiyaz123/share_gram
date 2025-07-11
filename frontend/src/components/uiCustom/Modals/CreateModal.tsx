@@ -1,7 +1,6 @@
 import { useCreateModal } from "@/lib/Zustand-store/createModalStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
-  // @ts-expect-error useForm Error
 import { useForm } from "react-hook-form";
 import * as z from "zod"
 import ImageSlider from "../Create/ImageSlider";

@@ -1,7 +1,6 @@
 import { Form,FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@/components/ui/input"
-// @ts-expect-error useForm Error
 import { useForm} from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import {z} from "zod"
@@ -75,7 +74,6 @@ export default function ProfileForm() {
        <FormField
         control={form.control}
         name="name"
-        // @ts-expect-error useForm Error
         render={({ field }) => (
           <FormItem>
             <FormLabel>
@@ -92,7 +90,6 @@ export default function ProfileForm() {
       <FormField
         control={form.control}
         name="username"
-        // @ts-expect-error useForm Error
         render={({ field }) => (
           <FormItem>
            
@@ -111,7 +108,6 @@ export default function ProfileForm() {
       <FormField
           control={form.control}
           name="bio"
-          // @ts-expect-error useForm Error
           render={({ field }) => (
             <FormItem>
               <FormLabel>Bio</FormLabel>

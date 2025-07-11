@@ -11,7 +11,6 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-// @ts-expect-error useForm Error
 import { useForm } from "react-hook-form"
 import { trpc } from "@/lib/trpc"
 import toast from "react-hot-toast"
@@ -22,6 +21,7 @@ function getPasswordStrength(password: string) {
   const hasLowercase = /[a-z]/.test(password);
   const hasUppercase = /[A-Z]/.test(password);
   const hasNumber = /\d/.test(password);
+  // eslint-disable-next-line no-useless-escape
   const hasSpecialChar = /[\$!%*?&@.]/.test(password); // updated to include '.'
 
   if (hasMinLength && hasLowercase && hasUppercase && hasNumber && hasSpecialChar) {
@@ -55,6 +55,7 @@ const formSchema = z.object({
     message: "Username must be at least 2 characters.",
   }),
   password: z.string().min(8).regex(
+    // eslint-disable-next-line no-useless-escape
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\$!%*?&@.])[A-Za-z\d@$!%*?&.]{8,}$/,
     {
       message:
@@ -108,7 +109,6 @@ export default function SignUpForm() {
           <FormField
             control={form.control}
             name="username"
-            // @ts-expect-error useForm Error
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Username</FormLabel>
@@ -125,7 +125,6 @@ export default function SignUpForm() {
           <FormField
             control={form.control}
             name="password"
-            // @ts-expect-error useForm Error
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Password</FormLabel>
@@ -146,7 +145,6 @@ export default function SignUpForm() {
           <FormField
             control={form.control}
             name="confirmPassword"
-            // @ts-expect-error useForm Error
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>

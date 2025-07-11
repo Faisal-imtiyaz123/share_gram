@@ -18,10 +18,6 @@ import ProfilePage from "./routes/ProfilePage";
 import { getAuthCookie } from "./lib/utils";
 
 
-
-
-
-
 export default function App() {
   const queryClient = new QueryClient({
     queryCache: new QueryCache({
@@ -39,7 +35,7 @@ export default function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "https://share-gram.onrender.com/trpc",
+             url: 'http://localhost:3000/trpc',
           // You can pass any HTTP headers you wish here
           headers:(opts) => {
             const {path} = opts.opList[0]

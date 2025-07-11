@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input"
 import { pusherClient } from "@/lib/pusher"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect, useRef, useState } from "react"
-  // @ts-expect-error useForm Error
 import { useForm } from "react-hook-form"
 import { z} from "zod"
 import { Info, SendHorizonal } from "lucide-react"
@@ -86,7 +85,6 @@ export default function ChattingPage({recieverId,senderId,messagesArr}:{reciever
         <FormField
           control={form.control}
           name="message"
-            // @ts-expect-error useForm Error
           render={({ field }) => (
             <FormItem className="flex items-center gap-4">
               <FormControl className="w-[40rem]">

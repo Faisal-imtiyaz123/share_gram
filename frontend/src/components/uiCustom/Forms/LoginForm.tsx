@@ -1,6 +1,5 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
-// @ts-expect-error useForm Error
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
@@ -39,7 +38,6 @@ export function LoginForm() {
         <FormField
           control={form.control}
           name="username"
-          // @ts-expect-error useForm Error
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>

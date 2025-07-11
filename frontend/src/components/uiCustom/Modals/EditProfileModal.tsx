@@ -3,7 +3,6 @@
 import { Form,FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@/components/ui/input"
-// @ts-expect-error useForm Error
 import { useForm} from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import {z} from "zod"
@@ -14,9 +13,6 @@ import { Textarea } from "@/components/ui/textarea"
 import axios from "axios"
 
 
-
-
-
 const FormSchema = z.object({
     name: z.string().min(3, {message: "name must be at least 3 characters."}),
     bio: z.string().min(20, { message: "Bio must be at least 20 letters."}),
@@ -24,7 +20,6 @@ const FormSchema = z.object({
 
 
 })
-
 
 export default function EditProfileModal() {
   const [file, setFile] = useState<File|null>(null)
@@ -87,7 +82,6 @@ export default function EditProfileModal() {
        <FormField
         control={form.control}
         name="name"
-        // @ts-expect-error useForm Error
         render={({ field }) => (
           <FormItem>
             <FormLabel>
@@ -104,7 +98,6 @@ export default function EditProfileModal() {
       <FormField
         control={form.control}
         name="username"
-        // @ts-expect-error useForm Error
         render={({ field }) => (
           <FormItem>
 
@@ -122,7 +115,6 @@ export default function EditProfileModal() {
       <FormField
           control={form.control}
           name="bio"
-          // @ts-expect-error useForm Error
           render={({ field }) => (
             <FormItem>
               <FormLabel>Bio</FormLabel>
