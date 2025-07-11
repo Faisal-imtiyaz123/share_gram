@@ -1,19 +1,18 @@
 
 import { MongoClient } from 'mongodb';
-import * as dotenv from 'dotenv';
-dotenv.config();
-const uri = process.env.MONGO_URL!// Replace with your MongoDB URI
-const client = new MongoClient(uri);
-
+import { config } from './config';
+const uri = "mongodb+srv://faisal:mnOiXLvIY0whJvIo@sharegram.1joei1k.mongodb.net/share_gram"
+const client = new MongoClient(config.mongoUrl);
 
 let dbConnection: any;
 
 export async function connectToDatabase() {
   if (!dbConnection) {
     await client.connect();
-    console.log("db connected")
-    dbConnection = client.db('share_gram'); // Replace with your database name
+    console.log("db connected");
+    dbConnection = client.db('share_gram');
+  } else {
+    console.log("db already connected");
   }
-  console.log("db already connected")
   return dbConnection;
 }

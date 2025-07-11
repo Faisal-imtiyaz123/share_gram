@@ -1,15 +1,15 @@
-import Pusher from "pusher"
-import PusherClient from "pusher-js"
-import * as dotenv from "dotenv"
-dotenv.config()
-export const pusher = new Pusher({
-    appId: process.env. NEXT_PUBLIC_PUSHER_APP_ID!,
-    key:  process.env.NEXT_PUBLIC_PUSHER_KEY!,
-    secret: process.env.NEXT_PUBLIC_PUSHER_SECRET!,
-    cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-    useTLS: true,
-  });
+import Pusher from "pusher";
+import PusherClient from "pusher-js";
+import { config } from "../config";
 
-export const pusherClient = new PusherClient( process.env.NEXT_PUBLIC_PUSHER_KEY!,{
-  cluster:process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-})
+export const pusher = new Pusher({
+  appId: config.pusher.appId,
+  key: config.pusher.key,
+  secret: config.pusher.secret,
+  cluster: config.pusher.cluster,
+  useTLS: true,
+});
+
+export const pusherClient = new PusherClient(config.pusher.key, {
+  cluster: config.pusher.cluster,
+});

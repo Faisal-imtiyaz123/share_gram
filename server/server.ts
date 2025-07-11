@@ -9,7 +9,6 @@ import { messageRouter } from './router/messageRouter';
 import { postRouter } from './router/postRouter';
 import { commentsRouter } from './router/commentsRouter';
 
-// created for each request
 const createContext = async (opts: trpcExpress.CreateExpressContextOptions)=> {
   if(opts.req.headers.auth === "pass"){
     return{

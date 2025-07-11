@@ -1,6 +1,4 @@
 "use server"
-
-
 import Comment from "@/lib/Modals/CommentModel";
 import { revalidatePath } from "next/cache";
 import { stringToMongoId } from "../utils/stringToMongoId";
